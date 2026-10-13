@@ -62,8 +62,6 @@ const drawer = $('#cart');
 const opts = () => ({
   student: $('#opt-student').checked,
   coupon: $('#opt-coupon').value,
-  usePoints: $('#opt-points').checked,
-  points: user?.points,
   pay: $('input[name=pay]:checked').value,
 });
 
@@ -91,8 +89,6 @@ function renderAll() {
   const count = ls.reduce((s, l) => s + l.qty, 0);
   $('#cart-empty').hidden = !!count;
   $('#cart-full').hidden = $('#cart-foot').hidden = !count;
-  $('#points-row').hidden = !(user && user.points >= 500);
-  if (!user) $('#opt-points').checked = false;
   $('#login-hint').hidden = !!user;
 
   $('#cart-items').replaceChildren(...ls.map((l) => {
@@ -114,7 +110,6 @@ function renderAll() {
 
   const rows = [['Részösszeg', ft(r.subtotal)]];
   if (r.pct) rows.push([`Kedvezmény (${r.pct}%)`, ft(r.discount), 'save']);
-  if (r.pointsSpent) rows.push(['Pontbeváltás', ft(POINTS_REDEEM.value), 'save']);
   rows.push([user ? 'Ezzel kapott pont' : 'Hűségpont', user ? `${r.earned} pont` : 'Lépj be a pontokért', 'pts']);
   $('#summary').replaceChildren(...rows.map(([k, v, cls]) => {
     const p = el('p', cls);
@@ -153,15 +148,18 @@ $('#pay-dialog').addEventListener('close', () => {
 
 function finish(r) {
   const slot = $('input[name=pickup]:checked');
-  if (user) { user.points += r.earned - r.pointsSpent; saveUser(); }
+  const before = user && levelFor(user.points).level;
+  if (user) { user.points += r.earned; saveUser(); }
+  const after = user && levelFor(user.points).level;
   drawer.close();
   $('#done-no').textContent = '#' + Math.floor(1000 + Math.random() * 9000);
   $('#done-time').textContent = slot.dataset.label;
   $('#done-total').textContent = ft(r.total);
-  $('#done-points').textContent = user ? `${r.earned} pontot kaptál, egyenleged ${user.points} pont.` : 'Legközelebb lépj be, és gyűjts pontot!';
+  $('#done-points').textContent = !user ? 'Legközelebb lépj be, és gyűjts pontot!'
+    : `${r.earned} pontot kaptál, egyenleged ${user.points} pont.` + (after !== before ? ` Új szintet értél el: ${after.name}!` : '');
   cart = {};
   $('#opt-coupon').value = '';
-  $('#opt-student').checked = $('#opt-points').checked = false;
+  $('#opt-student').checked = false;
   setCart();
   openDialog($('#done-dialog'));
 }

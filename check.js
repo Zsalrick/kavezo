@@ -1,6 +1,6 @@
 // Futtatás: node check.js
 const assert = require('assert');
-const { calc, pickupSlots, isOpen } = require('./pricing.js');
+const { calc, levelFor, pickupSlots, isOpen } = require('./pricing.js');
 
 const two = [{ price: 1000, qty: 2 }];
 assert.strictEqual(calc(two, { pay: 'card' }).total, 2000);
@@ -9,11 +9,13 @@ assert.strictEqual(calc(two, { pay: 'card' }).earned, 20);
 assert.strictEqual(calc(two, { student: true }).total, 1700);            // 15%
 assert.strictEqual(calc(two, { student: true, coupon: 'nap20' }).total, 1600); // a nagyobb nyer
 assert.strictEqual(calc(two, { coupon: 'KAMU' }).couponValid, false);
-assert.strictEqual(calc(two, { usePoints: true, points: 499 }).total, 2000);  // kevés pont
-const r = calc(two, { usePoints: true, points: 600 });
-assert.strictEqual(r.total, 1000);
-assert.strictEqual(r.pointsSpent, 500);
-assert.strictEqual(calc([{ price: 500, qty: 1 }], { usePoints: true, points: 500 }).total, 0); // nem megy mínuszba
+
+// Hűségszintek
+assert.strictEqual(levelFor(0).level.name, 'A Bolond');
+assert.strictEqual(levelFor(299).toNext, 1);
+assert.strictEqual(levelFor(300).level.name, 'A Mágus');
+assert.strictEqual(levelFor(1500).level.reward, 'saját Arkánum tarot pakli');
+assert.strictEqual(levelFor(99999).next, undefined);
 
 // Kedd 9:02 -> első időpont 9:30, ma
 const tue = new Date(2026, 9, 13, 9, 2);

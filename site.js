@@ -84,8 +84,13 @@ document.body.insertAdjacentHTML('beforeend', `
       <img src="assets/emblem.svg" alt="" width="56" height="56" class="modal-emblem">
       <h2 id="acc-name"></h2>
       <p class="muted" id="acc-email"></p>
-      <div class="points-card"><span id="acc-points">0</span><small>hűségpont</small></div>
-      <p class="muted small center">500 pont 1000 Ft kedvezményt ér. Revolut Pay-jel ötszörös pontot kapsz.</p>
+      <div class="points-card">
+        <span id="acc-points">0</span><small>hűségpont</small>
+        <p class="acc-level">Szinted: <b id="acc-level"></b></p>
+        <progress id="acc-progress" max="1" value="0"></progress>
+        <p class="muted small" id="acc-next"></p>
+      </div>
+      <p class="muted small center">Revolut Pay-jel ötszörös pontot kapsz. <a href="kedvezmenyek.html">A szintekről bővebben</a></p>
       <button value="ok" class="btn block">Rendben</button>
       <button value="logout" class="btn-text block">Kijelentkezés</button>
     </form>
@@ -126,6 +131,13 @@ document.addEventListener('click', (e) => {
   $('#acc-name').textContent = user.name;
   $('#acc-email').textContent = user.email;
   $('#acc-points').textContent = user.points;
+  const lv = levelFor(user.points);
+  $('#acc-level').textContent = lv.level.name;
+  $('#acc-progress').hidden = !lv.next;
+  if (lv.next) $('#acc-progress').value = (user.points - lv.level.min) / (lv.next.min - lv.level.min);
+  $('#acc-next').textContent = lv.next
+    ? `Még ${lv.toNext} pont ${lv.next.name} szintig.` + (lv.next.reward ? ` Ott ${lv.next.reward} vár.` : '')
+    : `Elérted a legfelső szintet, a ${lv.level.reward} a pultnál vár.`;
   openDialog($('#account-dialog'));
 });
 $('#login-dialog').addEventListener('close', () => {

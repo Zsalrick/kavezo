@@ -30,7 +30,7 @@
     <section class="wrap story">
       <div class="story-text">
         <h2>A kávé mellé egy lap jár</h2>
-        <p>A pultnál minden kávé mellé húzhatsz egy tarot kártyát. A lapon egy rövid, játékos üzenet áll. Nem jóslat, inkább egy gondolat a napodhoz. Elviheted, megtarthatod, vagy otthagyhatod a következő vendégnek.</p>
+        <p>A pultnál minden kávé mellé húzhatsz egy tarot kártyát, ez benne van a kávé árában. A lapon egy rövid, játékos üzenet áll. Nem jóslat, inkább egy gondolat a napodhoz. Elviheted, megtarthatod, vagy otthagyhatod a következő vendégnek.</p>
         <p>Nálunk nem szól rádió. A lejátszási listát mi raktuk össze, olyan zenékből, amik mellett jó olvasni, tanulni vagy csak ülni egy kicsit.</p>
         <p>Ha jobban érdekel a tarot, néha tanfolyamot és paklikészítő délutánt is tartunk. Ezekről az <a href="esemenyek.html">események</a> között írunk.</p>
       </div>
@@ -41,12 +41,12 @@
     </section>
 
     <section class="signature">
-      <img src="https://images.unsplash.com/photo-1559001724-fbad036dbc9e?auto=format&fit=crop&w=1400&q=75" alt="Latte tejhabbal, felülről fotózva" loading="lazy" width="1400" height="1000">
+      <img src="https://images.unsplash.com/photo-1565252556328-92ee4a9a0983?auto=format&fit=crop&w=1400&q=75" alt="Cappuccino és croissant egy asztalon" loading="lazy" width="1400" height="1000">
       <div class="signature-text">
-        <h2>Ha először jársz itt, ezt kérd</h2>
-        <p class="sig-name">Levendulás latte <span>1390 Ft</span></p>
-        <p>Dupla espresso, sok tej és a saját levendulaszirupunk, amit a pult mögött főzünk. Nálunk A Hold nevét viseli.</p>
-        <a href="arlista.html#kulonleges" class="btn">Megrendelem</a>
+        <h2>Napi menü</h2>
+        <p class="sig-name">Kávé, péksüti és egy kártya <span>1690 Ft</span></p>
+        <p>A kávét te választod az árlistáról, a péksütemény minden nap más. <span id="napi-ma"></span></p>
+        <a href="arlista.html#napi" class="btn">Megrendelem</a>
         <a href="arlista.html" class="text-link">Teljes árlista</a>
       </div>
     </section>
@@ -80,5 +80,6 @@
   <script src="data.js"></script>
   <script src="pricing.js"></script>
   <script src="site.js"></script>
+  <script>$('#napi-ma').textContent = `Ma ${dailyPastry().name.toLowerCase()} van.`;</script>
 </body>
 </html>
