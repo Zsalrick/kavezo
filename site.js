@@ -8,8 +8,13 @@ const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } cat
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
 const openDialog = (d) => { d.returnValue = ''; d.showModal(); };
 
-let user = load('user', null); // { name, email, points, interests: [] }
-const saveUser = () => { save('user', user); updateHeader(); };
+// Fake fiókok e-mail szerint, hogy kijelentkezés után is megmaradjanak a pontok, pecsétek, rendelések.
+let user = load('user', null); // { name, email, points, stamps, credits, studentId, interests }
+const saveUser = () => {
+  save('user', user);
+  if (user) save('accounts', { ...load('accounts', {}), [user.email]: user });
+  updateHeader();
+};
 
 const ICON = {
   user: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
@@ -89,7 +94,12 @@ document.body.insertAdjacentHTML('beforeend', `
         <progress id="acc-progress" max="1" value="0"></progress>
         <p class="muted small" id="acc-next"></p>
       </div>
-      <p class="muted small center">Revolut Pay-jel ötszörös pontot kapsz. <a href="kedvezmenyek.html">A szintekről bővebben</a></p>
+      <h3 class="acc-h">Kávépecsétek</h3>
+      <div class="stamps" id="acc-stamps"></div>
+      <p class="muted small" id="acc-credits"></p>
+      <h3 class="acc-h">Korábbi rendeléseim</h3>
+      <ul class="past-orders" id="acc-orders"></ul>
+      <p class="muted small center"><a href="kedvezmenyek.html">A hűségprogramról bővebben</a></p>
       <button value="ok" class="btn block">Rendben</button>
       <button value="logout" class="btn-text block">Kijelentkezés</button>
     </form>
@@ -137,13 +147,39 @@ document.addEventListener('click', (e) => {
   $('#acc-next').textContent = lv.next
     ? `Még ${lv.toNext} pont ${lv.next.name} szintig.` + (lv.next.reward ? ` Ott ${lv.next.reward} vár.` : '')
     : `Elérted a legfelső szintet, a ${lv.level.reward} a pultnál vár.`;
+  // Pecsétkártya: every-1 fizetett kávé, az utolsó mező az ingyenes
+  const need = lv.level.every - 1;
+  $('#acc-stamps').replaceChildren(...Array.from({ length: lv.level.every }, (_, i) =>
+    el('span', i === need ? 'stamp free' : i < (user.stamps || 0) ? 'stamp on' : 'stamp', i === need ? 'ingyen' : '')));
+  $('#acc-stamps').setAttribute('aria-label', `${user.stamps || 0} pecsét a ${need}-ből`);
+  $('#acc-credits').textContent = user.credits
+    ? `${user.credits} ingyen kávéd van, a kosárban beválthatod.`
+    : `Minden ${lv.level.every}. kávéd ingyenes. Még ${need - (user.stamps || 0)} kávé a következőig.`;
+  const mine = load('orders', []).filter((o) => o.email === user.email).reverse().slice(0, 5);
+  $('#acc-orders').replaceChildren(...mine.map((o) => {
+    const li = el('li');
+    const when = new Date(o.at).toLocaleString('hu-HU', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    li.append(el('b', null, `${when} · ${ft(o.total)}`), el('span', null, o.items.join(', ')));
+    if (o.cart) {
+      const again = el('button', 'btn small quiet', 'Újra kérem');
+      again.type = 'button';
+      again.onclick = () => {
+        save('cart', o.cart);
+        if (current === 'arlista.html') { location.hash = 'kosar'; location.reload(); } else location.href = 'arlista.html#kosar';
+      };
+      li.append(again);
+    }
+    return li;
+  }));
+  if (!mine.length) $('#acc-orders').append(el('li', 'muted', 'Még nem rendeltél.'));
   openDialog($('#account-dialog'));
 });
 $('#login-dialog').addEventListener('close', () => {
   if ($('#login-dialog').returnValue !== 'ok') { afterLogin = null; return; }
   const f = new FormData($('#login-form'));
   // Fake: bármilyen jelszót elfogad, a jelszót nem tároljuk.
-  user = { name: f.get('username'), email: f.get('email'), points: 0, interests: [] };
+  const email = f.get('email').trim().toLowerCase();
+  user = load('accounts', {})[email] || { name: f.get('username'), email, points: 0, stamps: 0, credits: 0, interests: [] };
   saveUser();
   $('#login-form').reset();
   afterLogin?.();

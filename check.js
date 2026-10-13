@@ -1,12 +1,31 @@
 // Futtatás: node check.js
 const assert = require('assert');
-const { calc, levelFor, validStudentId, pickupSlots, isOpen } = require('./pricing.js');
+const { calc, addStamps, levelFor, validStudentId, pickupSlots, isOpen } = require('./pricing.js');
 
 const two = [{ price: 1000, qty: 2 }];
-assert.strictEqual(calc(two, { pay: 'card' }).total, 2000);
-assert.strictEqual(calc(two, { pay: 'revolut' }).earned, 100);           // 5× pont
-assert.strictEqual(calc(two, { pay: 'card' }).earned, 20);
+assert.strictEqual(calc(two).total, 2000);
+assert.strictEqual(calc(two).earned, 20);                                // 1 pont / 100 Ft, fizetési módtól függetlenül
 assert.strictEqual(calc(two, { student: true }).total, 1700);            // 15%
+
+// Ingyen kávé: a legolcsóbb beváltható kávé ingyenes, a napi menü nem váltható be, de pecsétet ad.
+const mix = [
+  { price: 990, qty: 1, coffee: true, freeable: true },
+  { price: 690, qty: 2, coffee: true, freeable: true },
+  { price: 1690, qty: 1, coffee: true, freeable: false },
+  { price: 790, qty: 1 },
+];
+let r = calc(mix, { freeCoffee: true });
+assert.strictEqual(r.free, 690);
+assert.strictEqual(r.total, 990 + 690 + 1690 + 790);
+assert.strictEqual(r.coffees, 3);                                        // 4 kávé, ebből 1 ingyenes
+r = calc(mix, { freeCoffee: true, student: true });
+assert.strictEqual(r.total, 4160 - 624);                                 // a 15% az ingyen kávé után számolódik
+assert.strictEqual(calc([{ price: 1690, qty: 1, coffee: true }], { freeCoffee: true }).free, 0);
+
+// Pecsétkártya: minden 10. ingyenes = 9 után jár egy
+assert.deepStrictEqual(addStamps({}, 9, 10), { stamps: 0, credits: 1 });
+assert.deepStrictEqual(addStamps({ stamps: 7, credits: 0 }, 3, 10), { stamps: 1, credits: 1 });
+assert.deepStrictEqual(addStamps({ stamps: 0, credits: 1 }, 7, 8), { stamps: 0, credits: 2 }); // minden 8. = 7 után
 assert.strictEqual(validStudentId('7212345678'), true);
 assert.strictEqual(validStudentId('72123 456789'), true);   // szóköz mehet, 11 jegy
 assert.strictEqual(validStudentId('12345'), false);
@@ -14,9 +33,9 @@ assert.strictEqual(validStudentId('72123456ab'), false);
 
 // Hűségszintek
 assert.strictEqual(levelFor(0).level.name, 'A Bolond');
-assert.strictEqual(levelFor(299).toNext, 1);
-assert.strictEqual(levelFor(300).level.name, 'A Mágus');
-assert.strictEqual(levelFor(1500).level.reward, 'saját Arkánum tarot pakli');
+assert.strictEqual(levelFor(199).toNext, 1);
+assert.strictEqual(levelFor(200).level.every, 9);
+assert.strictEqual(levelFor(1000).level.reward, 'saját Arkánum tarot pakli');
 assert.strictEqual(levelFor(99999).next, undefined);
 
 // Kedd 9:02 -> első időpont 9:30, ma

@@ -64,6 +64,7 @@ const studentId = () => $('#opt-student-id').value.replace(/\s/g, '');
 const wantsStudent = () => !!user && $('#opt-student').checked;
 const opts = () => ({
   student: wantsStudent() && validStudentId(studentId()),
+  freeCoffee: !!user?.credits && $('#opt-free').checked, // ponytail: rendelésenként egy ingyen kávé váltható be
   pay: $('input[name=pay]:checked').value,
 });
 
@@ -95,6 +96,9 @@ function renderAll() {
   $('#student-off').hidden = !!user;
   $('#student-id-row').hidden = !wantsStudent();
   if (user?.studentId && !$('#opt-student-id').value) $('#opt-student-id').value = user.studentId;
+  const canFree = !!user?.credits && ls.some((l) => l.freeable);
+  $('#free-row').hidden = !canFree;
+  $('#free-count').textContent = user?.credits ? `${user.credits} ingyen kávéd van, a kosár legolcsóbb kávéja lesz ingyenes.` : '';
 
   $('#cart-items').replaceChildren(...ls.map((l) => {
     const li = el('li', 'cart-line');
@@ -113,8 +117,9 @@ function renderAll() {
   $('#order-btn').disabled = idBad;
 
   const rows = [['Részösszeg', ft(r.subtotal)]];
-  if (r.pct) rows.push([`Kedvezmény (${r.pct}%)`, ft(r.discount), 'save']);
-  rows.push([user ? 'Ezzel kapott pont' : 'Hűségpont', user ? `${r.earned} pont` : 'Lépj be a pontokért', 'pts']);
+  if (r.free) rows.push(['Ingyen kávé', ft(r.free), 'save']);
+  if (r.pct) rows.push([`Diákkedvezmény (${r.pct}%)`, ft(r.discount), 'save']);
+  rows.push([user ? 'Hűségpont és pecsét' : 'Hűségpont', user ? `${r.earned} pont, ${r.coffees} pecsét` : 'Lépj be a pontokért', 'pts']);
   $('#summary').replaceChildren(...rows.map(([k, v, cls]) => {
     const p = el('p', cls);
     p.append(el('span', null, k), el('span', null, v));
@@ -140,7 +145,7 @@ $('#order-btn').onclick = () => {
   const r = renderAll();
   if (opts().pay !== 'revolut') return finish(r);
   $('#pay-amount').textContent = ft(r.total);
-  $('#pay-points').textContent = user ? `${r.earned} hűségpontot kapsz (5×)` : 'Lépj be, és ötszörös pontot kapsz!';
+  $('#pay-points').textContent = 'Ezért a fizetésért ötszörös RevPoints jár a Revolut appodban.';
   drawer.close();
   openDialog($('#pay-dialog'));
 };
@@ -153,13 +158,21 @@ function finish(r) {
   const slot = $('input[name=pickup]:checked');
   const student = r.pct ? studentId() : null;
   const before = user && levelFor(user.points).level;
-  if (user) { user.points += r.earned; if (student) user.studentId = student; saveUser(); }
+  let newFree = 0;
+  if (user) {
+    const card = addStamps({ stamps: user.stamps, credits: (user.credits || 0) - (r.free ? 1 : 0) }, r.coffees, before.every);
+    newFree = card.credits - ((user.credits || 0) - (r.free ? 1 : 0));
+    Object.assign(user, card);
+    user.points += r.earned;
+    if (student) user.studentId = student;
+    saveUser();
+  }
   const after = user && levelFor(user.points).level;
   const no = Math.floor(1000 + Math.random() * 9000);
   // A pult nézet (pult.html) ebből a listából olvas. ponytail: csak ugyanazon a böngészőn látszik, valódi rendeléshez szerver kell.
   const orders = load('orders', []);
-  orders.push({ no, pickup: slot.value, pickupLabel: slot.dataset.label, name: user?.name || 'Vendég', items: lines().map((l) => `${l.qty}× ${l.name}`),
-    total: r.total, pay: opts().pay, student, done: false });
+  orders.push({ no, at: new Date().toISOString(), email: user?.email, pickup: slot.value, pickupLabel: slot.dataset.label, name: user?.name || 'Vendég',
+    items: lines().map((l) => `${l.qty}× ${l.name}`), cart: { ...cart }, total: r.total, pay: opts().pay, student, done: false });
   save('orders', orders);
   drawer.close();
   $('#done-no').textContent = '#' + no;
@@ -169,7 +182,8 @@ function finish(r) {
   $('#done-student-row').hidden = !student;
   $('#done-student').textContent = student;
   $('#done-points').textContent = !user ? 'Legközelebb lépj be, és gyűjts pontot!'
-    : `${r.earned} pontot kaptál, egyenleged ${user.points} pont.` + (after !== before ? ` Új szintet értél el: ${after.name}!` : '');
+    : `${r.earned} pontot és ${r.coffees} pecsétet kaptál.` + (newFree ? ` Összegyűlt egy ingyen kávé, a következő rendelésnél beválthatod!` : '')
+      + (after !== before ? ` Új szintet értél el: ${after.name}, mostantól minden ${after.every}. kávé ingyenes.` : '');
   cart = {};
   $('#opt-student').checked = false;
   setCart();

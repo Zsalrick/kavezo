@@ -337,3 +337,12 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .acc-level { margin: 14px auto 8px; }
 .points-card progress { width: 100%; height: 8px; accent-color: var(--night); }
 .points-card .small { margin: 8px auto 0; }
+.acc-h { font-size: 1.05rem; margin: 22px 0 10px; }
+.stamps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.stamp { aspect-ratio: 1; border-radius: 50%; border: 2px dashed #bfae8c; display: grid; place-items: center; font-size: .62rem; }
+.stamp.on { border: 0; background: var(--night) url(assets/emblem.svg) center / 80% no-repeat; }
+.stamp.free { border: 2px solid var(--gold); color: var(--gold-dark); font-weight: 700; }
+.past-orders { list-style: none; padding: 0; margin: 0 0 12px; }
+.past-orders li { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
+.past-orders span { color: var(--muted); }
+.past-orders .btn { align-self: flex-start; margin-top: 6px; }

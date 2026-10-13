@@ -38,3 +38,7 @@ const dailyPastry = (d = new Date()) => { const p = MENU.filter((m) => m.daily);
 MENU.find((m) => m.id === 'napi').desc = `Bármelyik kávé, a nap péksüteménye és egy kártya. Ma ${dailyPastry().name.toLowerCase()} a nap sütije.`;
 MENU.forEach((m) => { m.img ??= CATEGORIES.find((c) => c.id === m.cat).img; });
 
+// Ezek számítanak kávénak a pecsétkártyán. A napi menü pecsétet ad, de ingyen kávéként nem váltható be.
+const COFFEE_IDS = ['espresso', 'doppio', 'americano', 'cappuccino', 'flatwhite', 'latte', 'filter', 'levendula', 'jegeslatte', 'coldbrew'];
+MENU.forEach((m) => { m.coffee = m.id === 'napi' || COFFEE_IDS.includes(m.id); m.freeable = COFFEE_IDS.includes(m.id); });
+

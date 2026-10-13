@@ -1,26 +1,36 @@
-// Árazás, kedvezmények, nyitvatartás. Külön fájl, hogy a check.js Node-ból is tesztelhesse.
+// Árazás, kedvezmények, hűségprogram, nyitvatartás. Külön fájl, hogy a check.js Node-ból is tesztelhesse.
 const STUDENT_PCT = 15;
-const POINTS_PER_100FT = { revolut: 5, card: 1, cash: 1 }; // Revolut Pay = 5× pont
-// Hűségszintek az összegyűjtött pontok alapján. A legfelső szinten saját Arkánum pakli jár.
+const POINTS_PER_100FT = 1; // hűségpont minden fizetési módnál ugyanannyi; a Revolut Pay 5× RevPointsát a Revolut adja
+// Hűségszintek az összegyűjtött pontok alapján. every: minden hányadik kávé ingyenes.
 const LEVELS = [
-  { min: 0, name: 'A Bolond' },
-  { min: 300, name: 'A Mágus' },
-  { min: 800, name: 'A Főpapnő' },
-  { min: 1500, name: 'A Világ', reward: 'saját Arkánum tarot pakli' },
+  { min: 0, name: 'A Bolond', every: 10 },
+  { min: 200, name: 'A Mágus', every: 9 },
+  { min: 500, name: 'A Főpapnő', every: 8 },
+  { min: 1000, name: 'A Világ', every: 8, reward: 'saját Arkánum tarot pakli' },
 ];
 const HOURS = { 0: [10, 18], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [9, 20] }; // nap (0 = vasárnap) -> [nyit, zár]
 
 // Diákigazolvány száma: 10 vagy 11 számjegy (az oktatási azonosító 11 jegyű).
 const validStudentId = (id) => /^\d{10,11}$/.test((id || '').replace(/\s/g, ''));
 
-// lines: [{ price, qty }]; opts: { student, pay }. A student akkor igaz, ha be van lépve és van érvényes diákigazolvány-szám.
+// lines: [{ price, qty, coffee, freeable }]; opts: { student, freeCoffee }
+// freeCoffee: egy ingyen kávé beváltása, a kosár legolcsóbb beváltható kávéja lesz ingyenes.
 function calc(lines, opts = {}) {
   const subtotal = lines.reduce((s, l) => s + l.price * l.qty, 0);
+  const freeable = lines.filter((l) => l.freeable).map((l) => l.price);
+  const free = opts.freeCoffee && freeable.length ? Math.min(...freeable) : 0;
   const pct = opts.student ? STUDENT_PCT : 0;
-  const discount = Math.round(subtotal * pct / 100);
-  const total = subtotal - discount;
-  const earned = Math.floor(total / 100) * (POINTS_PER_100FT[opts.pay] || 1);
-  return { subtotal, pct, discount, total, earned };
+  const discount = Math.round((subtotal - free) * pct / 100);
+  const total = subtotal - free - discount;
+  const earned = Math.floor(total / 100) * POINTS_PER_100FT;
+  const coffees = lines.reduce((s, l) => s + (l.coffee ? l.qty : 0), 0) - (free ? 1 : 0); // az ingyenes nem ad pecsétet
+  return { subtotal, free, pct, discount, total, earned, coffees };
+}
+
+// Pecsétkártya: "minden 10. ingyenes" = 9 fizetett kávé után jár egy ingyen kávé.
+function addStamps(card, bought, every) {
+  const all = (card.stamps || 0) + bought;
+  return { stamps: all % (every - 1), credits: (card.credits || 0) + Math.floor(all / (every - 1)) };
 }
 
 // Melyik szinten van, és mennyi kell a következőhöz.
@@ -56,4 +66,4 @@ function pickupSlots(now, n = 8) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { calc, levelFor, validStudentId, pickupSlots, isOpen };
+if (typeof module !== 'undefined') module.exports = { calc, addStamps, levelFor, validStudentId, pickupSlots, isOpen };
