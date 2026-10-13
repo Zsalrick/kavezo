@@ -16,7 +16,7 @@
   <main id="main">
     <header class="page-head wrap narrow">
       <h1>Pult</h1>
-      <p>Az online rendelések átvételhez. Diákkedvezménynél kérd el a diákigazolványt, és nézd meg, egyezik-e a szám.</p>
+      <p>Az online rendelések átvételhez. Diákkedvezménynél kérd el a diákigazolványt, és nézd meg, hogy van-e rajta érvényes matrica, egyezik-e a név, a fénykép és a szám. Ha nem érvényes, a kedvezményt a pultnál kell kifizetni.</p>
       <p class="muted small">Demo: a rendelések ebben a böngészőben tárolódnak, ezért csak azok látszanak, amiket ezen az eszközön adtak le.</p>
     </header>
     <section class="wrap narrow">
@@ -42,15 +42,40 @@
           const head = el('p', 'order-head');
           head.append(el('b', null, `#${o.no}`), ` ${o.pickupLabel} · ${o.name}`);
           li.append(head, el('p', null, o.items.join(', ')), el('p', 'muted small', `${ft(o.total)} · ${PAY[o.pay]}`));
-          if (o.student) li.append(el('p', 'student-check', `Diákigazolvány: ${o.student}`));
+          if (o.student) li.append(studentBox(o, orders, done));
           const btn = el('button', 'btn small' + (done ? ' quiet' : ''), done ? 'Visszavonás' : 'Átadva');
           btn.type = 'button';
+          // Diákkedvezményes rendelést csak az igazolvány ellenőrzése után lehet átadni.
+          btn.disabled = !done && o.student && !o.studentCheck;
           btn.onclick = () => { o.done = !done; save('orders', orders); renderOrders(); };
           li.append(btn);
           return li;
         }));
         if (!mine.length) list.append(el('li', 'muted', done ? 'Még nincs átadott rendelés.' : 'Nincs várakozó rendelés.'));
       }
+    }
+    // Diákigazolvány ellenőrzése átvételkor: ha nem érvényes, a kedvezményt a pultnál kell kifizetni.
+    function studentBox(o, orders, done) {
+      const box = el('div', 'student-box');
+      box.append(el('p', 'student-check', `Diákigazolvány: ${o.student}`));
+      if (!done) {
+        const row = el('div', 'actions');
+        for (const [val, label] of [['ok', 'Rendben'], ['bad', 'Nem érvényes']]) {
+          const b = el('button', 'btn small' + (o.studentCheck === val ? '' : ' quiet'), label);
+          b.type = 'button';
+          b.onclick = () => { o.studentCheck = o.studentCheck === val ? null : val; save('orders', orders); renderOrders(); };
+          row.append(b);
+        }
+        box.append(row);
+      }
+      if (o.studentCheck === 'ok') box.append(el('p', 'check-ok', 'Diákigazolvány ellenőrizve ✓'));
+      if (o.studentCheck === 'bad') {
+        const diff = o.discount ?? Math.round(o.total * 15 / 85);
+        box.append(el('p', 'check-bad', o.pay === 'cash'
+          ? `Nem jár kedvezmény. Fizetendő a teljes ár: ${ft(o.total + diff)}.`
+          : `Nem jár kedvezmény. Fizetendő különbözet: ${ft(diff)}.`));
+      }
+      return box;
     }
     renderOrders();
     addEventListener('storage', renderOrders); // másik fülön leadott rendelés azonnal megjelenik

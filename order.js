@@ -206,7 +206,7 @@ function finish(r) {
   // A pult nézet (pult.html) ebből a listából olvas. ponytail: csak ugyanazon a böngészőn látszik, valódi rendeléshez szerver kell.
   const orders = load('orders', []);
   orders.push({ no, at: new Date().toISOString(), email: user?.email, pickup: slot.value, pickupLabel: slot.dataset.label, name: user?.name || 'Vendég',
-    items: lines().map((l) => `${l.qty}× ${l.name}`), cart: { ...cart }, total: r.total, pay: opts().pay, student, done: false });
+    items: lines().map((l) => `${l.qty}× ${l.name}`), cart: { ...cart }, total: r.total, discount: r.discount, pay: opts().pay, student, studentCheck: null, done: false });
   save('orders', orders);
   drawer.close();
   $('#done-no').textContent = '#' + no;

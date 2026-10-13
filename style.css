@@ -336,6 +336,11 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .order-head { font-size: 1.1rem; }
 .student-check { display: block; width: fit-content; background: var(--night); color: var(--gold); font-weight: 700; padding: 4px 10px; border-radius: 4px; }
 .orders.done .order { opacity: .6; }
+.student-box { margin: 8px 0 4px; padding: 12px 14px; background: var(--paper); border-left: 3px solid var(--gold); }
+.student-box .student-check { margin-bottom: 10px; }
+.student-box .actions { gap: 8px; }
+.check-ok { color: var(--ok); font-weight: 700; margin: 10px 0 0 !important; }
+.check-bad { color: var(--bad); font-weight: 700; margin: 10px 0 0 !important; }
 .order .btn { margin-top: 6px; }
 
 /* ---------- Ablakok ---------- */
