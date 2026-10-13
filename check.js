@@ -33,9 +33,10 @@ assert.strictEqual(validStudentId('72123456ab'), false);
 
 // Hűségszintek
 assert.strictEqual(levelFor(0).level.name, 'A Bolond');
-assert.strictEqual(levelFor(199).toNext, 1);
-assert.strictEqual(levelFor(200).level.every, 9);
-assert.strictEqual(levelFor(1000).level.name, 'A Világ');
+assert.strictEqual(levelFor(299).toNext, 1);
+assert.strictEqual(levelFor(300).level.every, 9);
+assert.strictEqual(levelFor(1000).level.name, 'A Szerencsekerék');
+assert.strictEqual(levelFor(1700).level.every, 6);
 
 // Ajándék pakli: minden 1000 pont után egy
 assert.deepStrictEqual(giftDecks(999), { earned: 0, available: 0, nextAt: 1000 });

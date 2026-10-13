@@ -1,12 +1,14 @@
 // Árazás, kedvezmények, hűségprogram, nyitvatartás. Külön fájl, hogy a check.js Node-ból is tesztelhesse.
 const STUDENT_PCT = 15;
 const POINTS_PER_100FT = 1; // hűségpont minden fizetési módnál ugyanannyi; a Revolut Pay 5× RevPointsát a Revolut adja
-// Hűségszintek az összegyűjtött pontok alapján. every: minden hányadik kávé ingyenes.
+// Hűségszintek, "A Bolond útja": minden szint egy nagy arkánum, a ponthatár a lap számának százszorosa.
+// every: minden hányadik kávé ingyenes.
 const LEVELS = [
-  { min: 0, name: 'A Bolond', every: 10 },
-  { min: 200, name: 'A Mágus', every: 9 },
-  { min: 500, name: 'A Főpapnő', every: 8 },
-  { min: 1000, name: 'A Világ', every: 8 },
+  { min: 0, num: '0', name: 'A Bolond', every: 10 },
+  { min: 300, num: 'III', name: 'Az Uralkodónő', every: 9 },
+  { min: 700, num: 'VII', name: 'A Szekér', every: 8 },
+  { min: 1000, num: 'X', name: 'A Szerencsekerék', every: 7 },
+  { min: 1700, num: 'XVII', name: 'A Csillag', every: 6 },
 ];
 const HOURS = { 0: [10, 18], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [9, 20] }; // nap (0 = vasárnap) -> [nyit, zár]
 

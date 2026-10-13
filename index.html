@@ -15,14 +15,19 @@
 <body>
   <main id="main">
     <section class="home-hero">
-      <img class="hero-photo" src="https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&fit=crop&w=1800&q=75" alt="Barista tejet önt egy csésze kávéba" width="1800" height="1200">
+      <picture>
+        <source media="(max-width: 899px)" sizes="100vw"
+          srcset="https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&q=80&fit=crop&crop=faces&w=900&h=1200 900w, https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&q=80&fit=crop&crop=faces&w=1350&h=1800 1350w">
+        <img class="hero-photo" sizes="100vw" alt="Barista tejet önt egy csésze kávéba" width="2400" height="1600"
+          src="https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&q=80&w=2400" srcset="https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&q=80&w=1600 1600w, https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&q=80&w=2400 2400w, https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&q=80&w=3200 3200w">
+      </picture>
       <div class="hero-card">
         <h1>Arkánum Kávéház</h1>
         <p>Kávé és tarot Győr belvárosában. Minden kávé mellé húzhatsz egy kártyát.</p>
         <p class="hero-hours" data-open-status></p>
         <div class="actions">
           <a href="rendeles.html" class="btn">Rendelés</a>
-          <a href="kapcsolat.html" class="text-link light">Hol vagyunk?</a>
+          <a href="kapcsolat.html" class="text-link light">Útvonal és nyitvatartás</a>
         </div>
       </div>
     </section>

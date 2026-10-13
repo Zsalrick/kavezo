@@ -74,7 +74,7 @@
 
       const lv = levelFor(user.points);
       $('#p-points').textContent = user.points;
-      $('#p-level').textContent = `${lv.level.name}, minden ${lv.level.every}. kávé ingyenes`;
+      $('#p-level').textContent = `${lv.level.num} · ${lv.level.name}, minden ${lv.level.every}. kávé ingyenes`;
       $('#p-progress').hidden = !lv.next;
       if (lv.next) $('#p-progress').value = (user.points - lv.level.min) / (lv.next.min - lv.level.min);
       $('#p-next').textContent = lv.next ? `Még ${lv.toNext} pont ${lv.next.name} szintig.` : 'Elérted a legfelső szintet.';
