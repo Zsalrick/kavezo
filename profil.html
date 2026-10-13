@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profilom · Arkánum Kávéház</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2b1a42">
+  <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="main">
+    <header class="page-head wrap">
+      <h1 id="p-name">Profilom</h1>
+      <p id="p-email"></p>
+    </header>
+
+    <section class="wrap" id="p-out" hidden>
+      <p>A profilodban látod a hűségpontjaidat, a kávépecséteidet és a korábbi rendeléseidet.</p>
+      <button type="button" class="btn" data-login>Belépés</button>
+    </section>
+
+    <section class="wrap profile" id="p-in" hidden>
+      <div class="profile-main">
+        <div class="p-block">
+          <h2>Hűségpontok</h2>
+          <p class="p-points"><span id="p-points">0</span> pont</p>
+          <p>Szinted: <b id="p-level"></b></p>
+          <progress id="p-progress" max="1" value="0"></progress>
+          <p class="muted" id="p-next"></p>
+        </div>
+
+        <div class="p-block">
+          <h2>Kávépecsétek</h2>
+          <div class="stamps" id="p-stamps"></div>
+          <p class="muted" id="p-credits"></p>
+        </div>
+
+        <div class="p-block">
+          <h2>Ajándék pakli</h2>
+          <p id="p-gift"></p>
+        </div>
+
+        <div class="p-block">
+          <h2>Diákigazolvány</h2>
+          <p id="p-student"></p>
+        </div>
+
+        <p><a href="kedvezmenyek.html" class="text-link">A hűségprogramról bővebben</a></p>
+        <p><button type="button" class="btn quiet" id="p-logout">Kijelentkezés</button></p>
+      </div>
+
+      <div class="profile-orders">
+        <h2>Korábbi rendeléseim</h2>
+        <ul class="past-orders" id="p-orders"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="pricing.js"></script>
+  <script src="site.js"></script>
+  <script>
+    function renderProfile() {
+      $('#p-out').hidden = !!user;
+      $('#p-in').hidden = !user;
+      $('#p-name').textContent = user ? user.name : 'Profilom';
+      $('#p-email').textContent = user ? user.email : '';
+      if (!user) return;
+
+      const lv = levelFor(user.points);
+      $('#p-points').textContent = user.points;
+      $('#p-level').textContent = `${lv.level.name}, minden ${lv.level.every}. kávé ingyenes`;
+      $('#p-progress').hidden = !lv.next;
+      if (lv.next) $('#p-progress').value = (user.points - lv.level.min) / (lv.next.min - lv.level.min);
+      $('#p-next').textContent = lv.next ? `Még ${lv.toNext} pont ${lv.next.name} szintig.` : 'Elérted a legfelső szintet.';
+
+      // Pecsétkártya: every-1 fizetett kávé, az utolsó mező az ingyenes
+      const need = lv.level.every - 1;
+      $('#p-stamps').replaceChildren(...Array.from({ length: lv.level.every }, (_, i) =>
+        el('span', i === need ? 'stamp free' : i < (user.stamps || 0) ? 'stamp on' : 'stamp', i === need ? 'ingyen' : '')));
+      $('#p-stamps').setAttribute('aria-label', `${user.stamps || 0} pecsét a ${need}-ből`);
+      $('#p-credits').textContent = user.credits
+        ? `${user.credits} ingyen kávéd van, a kosárban beválthatod.`
+        : `Még ${need - (user.stamps || 0)} kávé a következő ingyen kávéig.`;
+
+      const g = giftDecks(user.points, user.decksClaimed || 0);
+      $('#p-gift').replaceChildren(g.available
+        ? Object.assign(el('a', 'text-link', `${g.available} ajándék paklid van, válassz egyet!`), { href: 'pakli.html' })
+        : `Még ${g.nextAt - user.points} pont a következő ajándék pakliig. Minden 1000 pont után jár egy.`);
+
+      const sp = $('#p-student');
+      if (user.studentId) {
+        const del = el('button', 'btn-text', 'Törlés');
+        del.type = 'button';
+        del.onclick = () => { delete user.studentId; saveUser(); renderProfile(); };
+        sp.replaceChildren(`${user.studentId}. A kosárban automatikusan kitöltjük. `, del);
+      } else {
+        sp.textContent = 'Még nem adtál meg diákigazolványt. A kosárban a „Diák vagyok” bekapcsolásával adhatod meg.';
+      }
+
+      const mine = load('orders', []).filter((o) => o.email === user.email).reverse();
+      $('#p-orders').replaceChildren(...mine.map((o) => {
+        const li = el('li');
+        const when = new Date(o.at).toLocaleString('hu-HU', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        li.append(el('b', null, `${when} · ${ft(o.total)}`), el('span', null, o.items.join(', ')));
+        if (o.cart) {
+          const again = el('button', 'btn small quiet', 'Újra kérem');
+          again.type = 'button';
+          again.onclick = () => { save('cart', o.cart); location.href = 'rendeles.html#kosar'; };
+          li.append(again);
+        }
+        return li;
+      }));
+      if (!mine.length) $('#p-orders').append(el('li', 'muted', 'Még nem rendeltél.'));
+    }
+    $('#p-logout').onclick = () => { logout(); location.href = 'index.html'; };
+    document.addEventListener('userchange', renderProfile);
+    renderProfile();
+  </script>
+</body>
+</html>

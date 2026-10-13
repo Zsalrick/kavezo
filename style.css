@@ -310,6 +310,18 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .acc-gift { margin: 18px 0 0; font-weight: 600; }
 .acc-gift a { color: var(--gold-dark); }
 
+/* ---------- Profil ---------- */
+.profile { display: grid; gap: 48px; padding-top: 16px; }
+.p-block { padding: 24px 0; border-top: 1px solid var(--line); }
+.p-block:first-child { border-top: 0; padding-top: 0; }
+.p-block h2 { font-size: 1.35rem; }
+.p-points { font-size: 1.1rem; margin-bottom: 4px; }
+.p-points span { font-size: 3rem; font-weight: 700; line-height: 1; }
+.p-block progress { width: 100%; max-width: 420px; height: 8px; accent-color: var(--night); display: block; margin: 4px 0 10px; }
+.p-block .stamps { max-width: 360px; margin-bottom: 12px; }
+.profile-orders h2 { font-size: 1.35rem; }
+@media (min-width: 860px) { .profile { grid-template-columns: 1fr 1fr; gap: 72px; } }
+
 /* ---------- Pult ---------- */
 .orders { list-style: none; padding: 0; margin: 0 0 40px; }
 .order { padding: 18px 0; border-bottom: 1px solid var(--line); }
@@ -376,3 +388,8 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .past-orders li { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
 .past-orders span { color: var(--muted); }
 .past-orders .btn { align-self: flex-start; margin-top: 6px; }
+
+/* Napi menü kávéválasztó */
+.coffee-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border: 0; background: none; }
+.modal .coffee-pick .pay-opt { display: flex; margin: 0; padding: 10px 12px; gap: 10px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font-size: .95rem; }
+.coffee-pick .pay-opt:has(input:checked) { border-color: var(--night); box-shadow: inset 0 0 0 1px var(--night); }

@@ -22,7 +22,7 @@ const ICON = {
 };
 const PAGES = [
   ['index.html', 'Főoldal'],
-  ['arlista.html', 'Árlista'],
+  ['rendeles.html', 'Rendelés'],
   ['pakli.html', 'Paklik'],
   ['kedvezmenyek.html', 'Kedvezmények'],
   ['esemenyek.html', 'Események'],
@@ -40,13 +40,13 @@ document.body.insertAdjacentHTML('afterbegin', `
     <nav id="site-nav" class="site-nav" aria-label="Fő navigáció">
       ${PAGES.map(([href, label]) => `<a href="${href}"${href === current ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
       <div class="nav-extra">
-        <a class="btn block" href="arlista.html">Rendelés</a>
+        <a class="btn block" href="rendeles.html">Rendelés</a>
         <p class="nav-status" data-open-status></p>
       </div>
     </nav>
     <div class="header-actions">
       <button type="button" class="icon-btn account-btn" data-login>${ICON.user}<span class="account-label">Belépés</span></button>
-      <a class="icon-btn cart-link" href="arlista.html#kosar" aria-label="Kosár">${ICON.bag}<span class="count" id="cart-count" hidden>0</span></a>
+      <a class="icon-btn cart-link" href="rendeles.html#kosar" aria-label="Kosár">${ICON.bag}<span class="count" id="cart-count" hidden>0</span></a>
       <button type="button" class="hamburger" aria-expanded="false" aria-controls="site-nav" aria-label="Menü megnyitása"><span></span><span></span><span></span></button>
     </div>
   </header>`);
@@ -83,29 +83,7 @@ document.body.insertAdjacentHTML('beforeend', `
       <p class="muted small center">Demo: bármilyen adattal be tudsz lépni.</p>
     </form>
   </dialog>
-
-  <dialog id="account-dialog" class="modal">
-    <form method="dialog">
-      <img src="assets/emblem.svg" alt="" width="56" height="56" class="modal-emblem">
-      <h2 id="acc-name"></h2>
-      <p class="muted" id="acc-email"></p>
-      <div class="points-card">
-        <span id="acc-points">0</span><small>hűségpont</small>
-        <p class="acc-level">Szinted: <b id="acc-level"></b></p>
-        <progress id="acc-progress" max="1" value="0"></progress>
-        <p class="muted small" id="acc-next"></p>
-      </div>
-      <h3 class="acc-h">Kávépecsétek</h3>
-      <div class="stamps" id="acc-stamps"></div>
-      <p class="muted small" id="acc-credits"></p>
-      <p class="acc-gift" id="acc-gift"></p>
-      <h3 class="acc-h">Korábbi rendeléseim</h3>
-      <ul class="past-orders" id="acc-orders"></ul>
-      <p class="muted small center"><a href="kedvezmenyek.html">A hűségprogramról bővebben</a></p>
-      <button value="ok" class="btn block">Rendben</button>
-      <button value="logout" class="btn-text block">Kijelentkezés</button>
-    </form>
-  </dialog>`);
+`);
 
 // --- Hamburger menü ---
 const burger = $('.hamburger');
@@ -139,46 +117,7 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('[data-login]')) return;
   setMenu(false);
   if (!user) return requireLogin(() => {});
-  $('#acc-name').textContent = user.name;
-  $('#acc-email').textContent = user.email;
-  $('#acc-points').textContent = user.points;
-  const lv = levelFor(user.points);
-  $('#acc-level').textContent = lv.level.name;
-  $('#acc-progress').hidden = !lv.next;
-  if (lv.next) $('#acc-progress').value = (user.points - lv.level.min) / (lv.next.min - lv.level.min);
-  $('#acc-next').textContent = lv.next
-    ? `Még ${lv.toNext} pont ${lv.next.name} szintig.` + (lv.next.reward ? ` Ott ${lv.next.reward} vár.` : '')
-    : `Elérted a legfelső szintet, a ${lv.level.reward} a pultnál vár.`;
-  // Pecsétkártya: every-1 fizetett kávé, az utolsó mező az ingyenes
-  const need = lv.level.every - 1;
-  $('#acc-stamps').replaceChildren(...Array.from({ length: lv.level.every }, (_, i) =>
-    el('span', i === need ? 'stamp free' : i < (user.stamps || 0) ? 'stamp on' : 'stamp', i === need ? 'ingyen' : '')));
-  $('#acc-stamps').setAttribute('aria-label', `${user.stamps || 0} pecsét a ${need}-ből`);
-  $('#acc-credits').textContent = user.credits
-    ? `${user.credits} ingyen kávéd van, a kosárban beválthatod.`
-    : `Minden ${lv.level.every}. kávéd ingyenes. Még ${need - (user.stamps || 0)} kávé a következőig.`;
-  const g = giftDecks(user.points, user.decksClaimed || 0);
-  $('#acc-gift').replaceChildren(g.available
-    ? Object.assign(el('a', null, `${g.available} ajándék paklid van, válassz egyet!`), { href: 'pakli.html' })
-    : `Ajándék pakli: még ${g.nextAt - user.points} pont a következőig.`);
-  const mine = load('orders', []).filter((o) => o.email === user.email).reverse().slice(0, 5);
-  $('#acc-orders').replaceChildren(...mine.map((o) => {
-    const li = el('li');
-    const when = new Date(o.at).toLocaleString('hu-HU', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    li.append(el('b', null, `${when} · ${ft(o.total)}`), el('span', null, o.items.join(', ')));
-    if (o.cart) {
-      const again = el('button', 'btn small quiet', 'Újra kérem');
-      again.type = 'button';
-      again.onclick = () => {
-        save('cart', o.cart);
-        if (current === 'arlista.html') { location.hash = 'kosar'; location.reload(); } else location.href = 'arlista.html#kosar';
-      };
-      li.append(again);
-    }
-    return li;
-  }));
-  if (!mine.length) $('#acc-orders').append(el('li', 'muted', 'Még nem rendeltél.'));
-  openDialog($('#account-dialog'));
+  location.href = 'profil.html';
 });
 $('#login-dialog').addEventListener('close', () => {
   if ($('#login-dialog').returnValue !== 'ok') { afterLogin = null; return; }
@@ -192,12 +131,11 @@ $('#login-dialog').addEventListener('close', () => {
   afterLogin = null;
   document.dispatchEvent(new Event('userchange'));
 });
-$('#account-dialog').addEventListener('close', () => {
-  if ($('#account-dialog').returnValue !== 'logout') return;
+function logout() {
   user = null;
   saveUser();
   document.dispatchEvent(new Event('userchange'));
-});
+}
 
 // --- "Most nyitva" jelzés ---
 function openStatus(now = new Date()) {

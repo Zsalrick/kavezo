@@ -1,17 +1,25 @@
-// Árlista és rendelés oldal.
-let cart = load('cart', {}); // { menuId: db }
+// Rendelés oldal (kínálat árakkal + kosár).
+let cart = load('cart', {}); // { kulcs: db }, a napi menü kulcsa 'napi:<kávé id>'
 const setCart = () => { save('cart', cart); updateHeader(); renderAll(); };
-const lines = () => MENU.filter((m) => cart[m.id]).map((m) => ({ ...m, qty: cart[m.id] }));
-const change = (id, d) => { cart[id] = (cart[id] || 0) + d; if (cart[id] <= 0) delete cart[id]; setCart(); };
+const byId = (id) => MENU.find((m) => m.id === id);
+function itemFor(key) {
+  const [id, coffee] = key.split(':');
+  const m = byId(id);
+  if (!m) return null;
+  return coffee ? { ...m, key, name: `Napi menü: ${byId(coffee)?.name}, ${dailyPastry().name.toLowerCase()}` } : { ...m, key };
+}
+const lines = () => Object.entries(cart).map(([key, qty]) => { const it = itemFor(key); return it && { ...it, qty }; }).filter(Boolean);
+const change = (key, d) => { cart[key] = (cart[key] || 0) + d; if (cart[key] <= 0) delete cart[key]; setCart(); };
 
 function stepper(m, big) {
+  const key = m.key || m.id;
   const wrap = el('div', 'stepper' + (big ? ' big' : ''));
-  const qty = cart[m.id] || 0;
+  const qty = cart[key] || 0;
   if (!qty) {
     const add = el('button', 'add-btn', '+');
     add.type = 'button';
     add.ariaLabel = `${m.name} hozzáadása`;
-    add.onclick = () => change(m.id, 1);
+    add.onclick = () => change(key, 1);
     wrap.append(add);
     return wrap;
   }
@@ -20,13 +28,40 @@ function stepper(m, big) {
   minus.type = plus.type = 'button';
   minus.ariaLabel = `Egy ${m.name} kevesebb`;
   plus.ariaLabel = `Egy ${m.name} több`;
-  minus.onclick = () => change(m.id, -1);
-  plus.onclick = () => change(m.id, 1);
+  minus.onclick = () => change(key, -1);
+  plus.onclick = () => change(key, 1);
   wrap.append(minus, el('span', 'qty', qty), plus);
   return wrap;
 }
 
-// --- Árlista ---
+// Napi menü: a kávét a vendég választja, a süti a nap sütije.
+function napiButton() {
+  const wrap = el('div', 'stepper');
+  const add = el('button', 'add-btn', '+');
+  add.type = 'button';
+  add.ariaLabel = 'Napi menü, kávé kiválasztása';
+  add.onclick = () => {
+    $('#napi-ok').textContent = `Kosárba · ${ft(byId('napi').price)}`;
+    $('#napi-sub').textContent = `Mellé ma ${dailyPastry().name.toLowerCase()} és egy kártya jár.`;
+    $('#napi-coffees').replaceChildren(...MENU.filter((m) => m.freeable).map((m, i) => {
+      const label = el('label', 'pay-opt');
+      const input = el('input');
+      Object.assign(input, { type: 'radio', name: 'napi-coffee', value: m.id, checked: i === 0 });
+      label.append(input, el('span', null, m.name));
+      return label;
+    }));
+    openDialog($('#napi-dialog'));
+  };
+  const n = Object.entries(cart).filter(([k]) => k.startsWith('napi')).reduce((s, [, q]) => s + q, 0);
+  wrap.append(add);
+  if (n) wrap.prepend(el('span', 'qty', `${n} a kosárban`));
+  return wrap;
+}
+$('#napi-dialog').addEventListener('close', () => {
+  if ($('#napi-dialog').returnValue === 'ok') change('napi:' + $('input[name=napi-coffee]:checked').value, 1);
+});
+
+// --- Kínálat ---
 $('#cat-bar').append(...CATEGORIES.map((c) => { const a = el('a', 'tab', c.name); a.href = '#' + c.id; return a; }));
 $('#menu').append(...CATEGORIES.map((c) => {
   const sec = el('section', 'menu-cat');
@@ -86,7 +121,7 @@ function renderSlots() {
 }
 
 function renderAll() {
-  $$('.ctl').forEach((c) => c.replaceChildren(stepper(MENU.find((m) => m.id === c.dataset.id))));
+  $$('.ctl').forEach((c) => c.replaceChildren(c.dataset.id === 'napi' ? napiButton() : stepper(byId(c.dataset.id))));
 
   const ls = lines();
   const count = ls.reduce((s, l) => s + l.qty, 0);

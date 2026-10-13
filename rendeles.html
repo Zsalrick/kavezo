@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Árlista és rendelés · Arkánum Kávéház</title>
+  <title>Rendelés · Arkánum Kávéház</title>
   <meta name="theme-color" content="#2b1a42">
   <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
 <body>
   <main id="main">
     <header class="page-head wrap">
-      <h1>Árlista</h1>
+      <h1>Rendelés</h1>
       <p>Rendelj előre, és vedd át a pultnál. Az átvétel idejét a kosárban választhatod ki. <span data-open-status></span></p>
     </header>
 
@@ -39,7 +39,7 @@
       <div id="cart-empty" class="empty">
         <img src="assets/emblem.svg" alt="" width="88" height="88">
         <p>A kosarad még üres.</p>
-        <button type="button" class="btn" data-close>Vissza az árlistához</button>
+        <button type="button" class="btn" data-close>Vissza a rendeléshez</button>
       </div>
       <div id="cart-full">
         <ul id="cart-items" class="cart-items"></ul>
@@ -74,6 +74,17 @@
       <div id="summary" class="summary"></div>
       <button type="button" class="btn block" id="order-btn">Megrendelem</button>
     </div>
+  </dialog>
+
+  <dialog id="napi-dialog" class="modal">
+    <form method="dialog">
+      <h2>Napi menü</h2>
+      <p class="muted center" id="napi-sub"></p>
+      <p><b>Melyik kávét kéred?</b></p>
+      <div class="pay-options coffee-pick" id="napi-coffees"></div>
+      <button value="ok" class="btn block" id="napi-ok">Kosárba</button>
+      <button value="cancel" class="btn-text block">Mégse</button>
+    </form>
   </dialog>
 
   <dialog id="pay-dialog" class="modal paysheet">

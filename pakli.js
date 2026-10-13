@@ -18,7 +18,7 @@ function fan(d) {
 function renderGift() {
   const box = $('#gift');
   if (!user) {
-    box.replaceChildren(el('p', null, 'Hűségpontból ajándék pakli jár: az első 1000 pontnál, utána minden további 2000 pontnál.'));
+    box.replaceChildren(el('p', null, 'Minden 1000 hűségpont után ajándék pakli jár.'));
     const b = el('button', 'btn', 'Belépés');
     b.type = 'button';
     b.dataset.login = '';
@@ -30,7 +30,7 @@ function renderGift() {
   if (g.available) {
     p.append(el('b', null, `${g.available} ajándék paklid van.`), ' Válaszd ki lent, melyiket kéred, és a pultnál átveheted.');
   } else {
-    p.textContent = `Ajándék pakli az első 1000 pontnál, utána minden további 2000 pontnál jár. Neked most ${user.points} pontod van, még ${g.nextAt - user.points} kell a következőig.`;
+    p.textContent = `Minden 1000 hűségpont után ajándék pakli jár. Neked most ${user.points} pontod van, még ${g.nextAt - user.points} kell a következőig.`;
   }
   box.replaceChildren(p);
   if (lastGiftNo) box.append(el('p', 'gift-done', `Beváltva! Rendelésszám: #${lastGiftNo}. A pultnál ezzel kérd.`));
@@ -59,7 +59,7 @@ function renderDecks() {
       };
       actions.append(gift);
     }
-    if (cart[d.id]) { const go = el('a', 'text-link', 'Kosár megnyitása'); go.href = 'arlista.html#kosar'; actions.append(go); }
+    if (cart[d.id]) { const go = el('a', 'text-link', 'Kosár megnyitása'); go.href = 'rendeles.html#kosar'; actions.append(go); }
     text.append(actions);
     art.append(fan(d), text);
     return art;

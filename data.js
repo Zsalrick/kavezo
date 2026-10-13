@@ -1,4 +1,4 @@
-// Az árlista. Itt írjátok át az árakat, neveket, leírásokat.
+// A kínálat. Itt írjátok át az árakat, neveket, leírásokat.
 const photo = (id, w = 600) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 const CATEGORIES = [
@@ -40,7 +40,7 @@ const MENU = [
 
 // A nap péksüteménye a hét napja szerint forog. Fotó nélküli tételek a kategória fotóját kapják.
 const dailyPastry = (d = new Date()) => { const p = MENU.filter((m) => m.daily); return p[d.getDay() % p.length]; };
-MENU.find((m) => m.id === 'napi').desc = `Bármelyik kávé, a nap péksüteménye és egy kártya. Ma ${dailyPastry().name.toLowerCase()} a nap sütije.`;
+MENU.find((m) => m.id === 'napi').desc = `Egy szabadon választott kávé, a nap péksüteménye és egy kártya. Ma ${dailyPastry().name.toLowerCase()} a nap sütije.`;
 MENU.forEach((m) => { m.img ??= CATEGORIES.find((c) => c.id === m.cat).img; });
 
 // Ezek számítanak kávénak a pecsétkártyán. A napi menü pecsétet ad, de ingyen kávéként nem váltható be.
