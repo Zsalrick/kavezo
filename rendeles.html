@@ -55,10 +55,8 @@
         <h3>Diákkedvezmény</h3>
         <div id="student-on">
           <label class="switch"><input type="checkbox" id="opt-student"><span class="track"></span><span>Diák vagyok<small>15% kedvezmény. Átvételkor összevetjük a diákigazolványoddal.</small></span></label>
-          <label class="field" id="student-id-row" hidden>Diákigazolvány száma
-            <input id="opt-student-id" inputmode="numeric" autocomplete="off" maxlength="13" placeholder="10 vagy 11 számjegy">
-            <span class="field-error" id="student-id-error" aria-live="polite"></span>
-          </label>
+          <p class="muted small" id="student-has" hidden></p>
+          <p class="student-need" id="student-need" hidden aria-live="polite">Előbb add meg a diákigazolványod számát a profilodban. <a href="profil.html#diak">Beállítom</a></p>
         </div>
         <p class="login-hint" id="student-off">A diákkedvezmény és a pontgyűjtés belépve érhető el. <button type="button" class="btn-text" data-login>Belépés</button></p>
 

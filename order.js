@@ -57,6 +57,8 @@ function napiButton() {
   if (n) wrap.prepend(el('span', 'qty', `${n} a kosárban`));
   return wrap;
 }
+// Szám nélkül a kapcsoló nem marad bekapcsolva (renderAll visszaállítja), helyette a profilba küldünk.
+$('#opt-student').addEventListener('change', () => { $('#student-need').hidden = !!user?.studentId; });
 $('#napi-dialog').addEventListener('close', () => {
   if ($('#napi-dialog').returnValue === 'ok') change('napi:' + $('input[name=napi-coffee]:checked').value, 1);
 });
@@ -95,10 +97,10 @@ $$('.menu-cat').forEach((s) => io.observe(s));
 // --- Kosár ---
 const drawer = $('#cart');
 // Diákkedvezmény csak belépve, kitöltött diákigazolvány-számmal jár.
-const studentId = () => $('#opt-student-id').value.replace(/\s/g, '');
-const wantsStudent = () => !!user && $('#opt-student').checked;
+// A diákigazolvány-számot a profilban kell megadni, a kosár onnan veszi.
+const wantsStudent = () => !!user?.studentId && $('#opt-student').checked;
 const opts = () => ({
-  student: wantsStudent() && validStudentId(studentId()),
+  student: wantsStudent(),
   freeCoffee: !!user?.credits && $('#opt-free').checked, // ponytail: rendelésenként egy ingyen kávé váltható be
   pay: $('input[name=pay]:checked').value,
 });
@@ -129,8 +131,9 @@ function renderAll() {
   $('#cart-full').hidden = $('#cart-foot').hidden = !count;
   $('#student-on').hidden = !user;
   $('#student-off').hidden = !!user;
-  $('#student-id-row').hidden = !wantsStudent();
-  if (user?.studentId && !$('#opt-student-id').value) $('#opt-student-id').value = user.studentId;
+  if (!user?.studentId) $('#opt-student').checked = false;
+  $('#student-has').hidden = !wantsStudent();
+  $('#student-has').textContent = `Diákigazolvány: ${user?.studentId}`;
   const canFree = !!user?.credits && ls.some((l) => l.freeable);
   $('#free-row').hidden = !canFree;
   $('#free-count').textContent = user?.credits ? `${user.credits} ingyen kávéd van, a kosár legolcsóbb kávéja lesz ingyenes.` : '';
@@ -147,9 +150,6 @@ function renderAll() {
 
   const o = opts();
   const r = calc(ls, o);
-  const idBad = wantsStudent() && !o.student;
-  $('#student-id-error').textContent = idBad && studentId() ? 'A szám 10 vagy 11 számjegyből áll.' : '';
-  $('#order-btn').disabled = idBad;
 
   const rows = [['Részösszeg', ft(r.subtotal)]];
   if (r.free) rows.push(['Ingyen kávé', ft(r.free), 'save']);
@@ -163,7 +163,7 @@ function renderAll() {
   $('#cart-bar').hidden = !count || drawer.open;
   $('#cart-bar-count').textContent = `${count} tétel`;
   $('#cart-bar-total').textContent = ft(r.total);
-  $('#order-btn').textContent = idBad ? 'Add meg a diákigazolványod számát' : `Megrendelem · ${ft(r.total)}`;
+  $('#order-btn').textContent = `Megrendelem · ${ft(r.total)}`;
   return r;
 }
 
@@ -191,7 +191,7 @@ $('#pay-dialog').addEventListener('close', () => {
 
 function finish(r) {
   const slot = $('input[name=pickup]:checked');
-  const student = r.pct ? studentId() : null;
+  const student = r.pct ? user.studentId : null;
   const before = user && levelFor(user.points).level;
   let newFree = 0;
   if (user) {
@@ -199,7 +199,6 @@ function finish(r) {
     newFree = card.credits - ((user.credits || 0) - (r.free ? 1 : 0));
     Object.assign(user, card);
     user.points += r.earned;
-    if (student) user.studentId = student;
     saveUser();
   }
   const after = user && levelFor(user.points).level;

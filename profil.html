@@ -45,9 +45,16 @@
           <p id="p-gift"></p>
         </div>
 
-        <div class="p-block">
+        <div class="p-block" id="diak">
           <h2>Diákigazolvány</h2>
-          <p id="p-student"></p>
+          <p class="muted">Ha megadod, a kosárban bekapcsolhatod a 15% diákkedvezményt. Átvételkor ezt a számot vetjük össze a diákigazolványoddal.</p>
+          <form class="student-form" id="p-student-form" novalidate>
+            <label class="field">Diákigazolvány száma
+              <input id="p-student-id" inputmode="numeric" autocomplete="off" maxlength="13" placeholder="10 vagy 11 számjegy">
+            </label>
+            <button class="btn">Mentés</button>
+          </form>
+          <p class="field-error" id="p-student-msg" aria-live="polite"></p>
         </div>
 
         <p><a href="kedvezmenyek.html" class="text-link">A hűségprogramról bővebben</a></p>
@@ -93,15 +100,7 @@
         ? Object.assign(el('a', 'text-link', `${g.available} ajándék paklid van, válassz egyet!`), { href: 'pakli.html' })
         : `Még ${g.nextAt - user.points} pont a következő ajándék pakliig. Minden 1000 pont után jár egy.`);
 
-      const sp = $('#p-student');
-      if (user.studentId) {
-        const del = el('button', 'btn-text', 'Törlés');
-        del.type = 'button';
-        del.onclick = () => { delete user.studentId; saveUser(); renderProfile(); };
-        sp.replaceChildren(`${user.studentId}. A kosárban automatikusan kitöltjük. `, del);
-      } else {
-        sp.textContent = 'Még nem adtál meg diákigazolványt. A kosárban a „Diák vagyok” bekapcsolásával adhatod meg.';
-      }
+      $('#p-student-id').value = user.studentId || '';
 
       const mine = load('orders', []).filter((o) => o.email === user.email).reverse();
       $('#p-orders').replaceChildren(...mine.map((o) => {
@@ -118,6 +117,17 @@
       }));
       if (!mine.length) $('#p-orders').append(el('li', 'muted', 'Még nem rendeltél.'));
     }
+    $('#p-student-form').onsubmit = (e) => {
+      e.preventDefault();
+      const id = $('#p-student-id').value.replace(/\s/g, '');
+      const msg = $('#p-student-msg');
+      if (id && !validStudentId(id)) { msg.className = 'field-error'; msg.textContent = 'A szám 10 vagy 11 számjegyből áll.'; return; }
+      if (id) user.studentId = id; else delete user.studentId;
+      saveUser();
+      msg.className = 'field-ok';
+      msg.replaceChildren(id ? 'Mentve ✓ ' : 'Törölve ✓ ');
+      if (id) msg.append(Object.assign(el('a', null, 'Vissza a kosárhoz'), { href: 'rendeles.html#kosar' }));
+    };
     $('#p-logout').onclick = () => { logout(); location.href = 'index.html'; };
     document.addEventListener('userchange', renderProfile);
     renderProfile();
