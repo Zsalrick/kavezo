@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <main id="main">
@@ -20,18 +20,54 @@
       <p class="muted small">Demo: a rendelések ebben a böngészőben tárolódnak, ezért csak azok látszanak, amiket ezen az eszközön adtak le.</p>
     </header>
     <section class="wrap narrow">
-      <h2>Átvételre vár</h2>
+      <h2>Helyben vásárlás hűségkártyával</h2>
+      <p class="muted">A vendég felmutatja a profiljában a hűségkártyát. Írd be a kártyaszámot és a fizetett összeget, és jóváírjuk a pontokat és a kávépecséteket.</p>
+      <form class="instore" id="instore" novalidate>
+        <label class="field">Kártyaszám<input id="is-member" autocomplete="off" placeholder="AK 1234 5678"></label>
+        <label class="field">Fizetett összeg (Ft)<input id="is-amount" inputmode="numeric" autocomplete="off" placeholder="pl. 1700"></label>
+        <label class="field">Kávék száma<input id="is-coffees" inputmode="numeric" autocomplete="off" value="1"></label>
+        <button class="btn">Jóváírás</button>
+      </form>
+      <p class="field-error" id="is-msg" aria-live="polite"></p>
+
+      <h2 class="orders-h">Átvételre vár</h2>
       <ul class="orders" id="open-orders"></ul>
       <h2>Átadva</h2>
       <ul class="orders done" id="done-orders"></ul>
     </section>
   </main>
 
-  <script src="pricing.js?v=6"></script>
-  <script src="data.js?v=6"></script>
-  <script src="site.js?v=6"></script>
+  <script src="pricing.js?v=10"></script>
+  <script src="data.js?v=10"></script>
+  <script src="site.js?v=10"></script>
   <script>
     const PAY = { revolut: 'Revolut Pay, fizetve', card: 'Bankkártya, fizetve', cash: 'Fizetés átvételkor', gift: '1000 hűségpontból' };
+    // Helyben vásárlás: a kártyaszám alapján megkeressük a fiókot, és jóváírjuk a pontokat és pecséteket.
+    // ponytail: csak az ezen az eszközön lévő fiókokat látja, valódi működéshez szerver kell.
+    $('#instore').onsubmit = (e) => {
+      e.preventDefault();
+      const msg = $('#is-msg');
+      const id = $('#is-member').value.replace(/\s/g, '').toUpperCase();
+      const amount = parseInt($('#is-amount').value.replace(/\D/g, ''), 10) || 0;
+      const coffees = parseInt($('#is-coffees').value, 10) || 0;
+      const accounts = load('accounts', {});
+      const acc = Object.values(accounts).find((a) => a.memberId === id);
+      msg.className = 'field-error';
+      if (!acc) { msg.textContent = 'Nincs ilyen kártyaszám.'; return; }
+      if (!amount) { msg.textContent = 'Add meg a fizetett összeget.'; return; }
+      const earned = Math.floor(amount / 100) * POINTS_PER_100FT;
+      const before = levelFor(acc.lifetime).level;
+      acc.points += earned;
+      acc.lifetime += earned;
+      Object.assign(acc, addStamps(addStamps(acc, coffees, before.every), 0, levelFor(acc.lifetime).level.every));
+      save('accounts', accounts);
+      if (user?.email === acc.email) { user = acc; save('user', acc); updateHeader(); }
+      msg.className = 'field-ok';
+      msg.textContent = `${acc.name}: +${earned} pont, +${coffees} pecsét. Egyenleg: ${acc.points} pont${acc.credits ? `, ${acc.credits} ingyen kávé` : ''}.`;
+      $('#instore').reset();
+      $('#is-coffees').value = 1;
+    };
+
     function renderOrders() {
       const orders = load('orders', []).sort((a, b) => a.pickup.localeCompare(b.pickup));
       for (const done of [false, true]) {

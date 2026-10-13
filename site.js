@@ -12,6 +12,12 @@ const openDialog = (d) => { d.returnValue = ''; d.showModal(); };
 let user = load('user', null); // { name, email, points, stamps, credits, studentId, interests }
 // points: elkölthető egyenleg (a pakli levonódik belőle), lifetime: összes valaha gyűjtött pont, ebből jön a szint.
 function migrate(u) {
+  // Hűségkártya-szám: ezt mutatja a QR-kód a profilban, a pultnál ezzel írjuk jóvá a helyben vásárlást.
+  if (u && !u.memberId) {
+    u.memberId = 'AK' + String(Math.floor(Math.random() * 1e8)).padStart(8, '0');
+    save('accounts', { ...load('accounts', {}), [u.email]: u }); // azonnal mentjük, hogy a kártyaszám ne változzon
+    if (load('user', null)?.email === u.email) save('user', u);
+  }
   if (u && u.lifetime == null) { u.lifetime = u.points || 0; u.points = Math.max(0, (u.points || 0) - (u.decksClaimed || 0) * DECK_POINTS); }
   // Szintlépés után a pecsétkártya rövidebb lehet: a felesleges pecsétek ingyen kávévá válnak.
   if (u) Object.assign(u, addStamps(u, 0, levelFor(u.lifetime).level.every));
@@ -93,6 +99,20 @@ document.body.insertAdjacentHTML('beforeend', `
   </dialog>
 `);
 
+// Kártyaszám olvasható formában: AK 1234 5678
+const formatMember = (id) => id.replace(/^(AK)(\d{4})(\d{4})$/, '$1 $2 $3');
+
+// Saját QR-kód SVG-ként (a qrcode-generator könyvtárral, csak ott töltjük be, ahol kell).
+function qrSvg(text) {
+  const qr = qrcode(0, 'M');
+  qr.addData(text);
+  qr.make();
+  const n = qr.getModuleCount(), q = 3;
+  let d = '';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) d += `M${c + q} ${r + q}h1v1h-1z`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 2 * q} ${n + 2 * q}" role="img" aria-label="Hűségkártya QR-kód"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#2b1a42" shape-rendering="crispEdges"/></svg>`;
+}
+
 // --- Hamburger menü ---
 const burger = $('.hamburger');
 const setMenu = (open) => {
@@ -133,7 +153,7 @@ $('#login-dialog').addEventListener('close', () => {
   const f = new FormData($('#login-form'));
   // Fake: bármilyen jelszót elfogad, a jelszót nem tároljuk.
   const email = f.get('email').trim().toLowerCase();
-  user = migrate(load('accounts', {})[email]) || { name: f.get('username'), email, points: 0, lifetime: 0, stamps: 0, credits: 0, interests: [] };
+  user = migrate(load('accounts', {})[email] || { name: f.get('username'), email, points: 0, lifetime: 0, stamps: 0, credits: 0, interests: [] });
   saveUser();
   $('#login-form').reset();
   afterLogin?.();

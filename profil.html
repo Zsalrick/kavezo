@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <main id="main">
@@ -26,6 +26,18 @@
 
     <section class="wrap profile" id="p-in" hidden>
       <div class="profile-main">
+        <div class="p-block">
+          <div class="member-card">
+            <div class="mc-head">
+              <img src="assets/emblem.svg" alt="" width="40" height="40">
+              <p><b>Arkánum hűségkártya</b><span id="p-mc-level"></span></p>
+            </div>
+            <div class="mc-qr" id="p-qr"></div>
+            <p class="mc-id" id="p-member"></p>
+          </div>
+          <p class="muted small">Ha helyben vásárolsz, mutasd fel ezt a kódot a pultnál, és ugyanúgy megkapod a pontokat és a pecséteket, mint online rendelésnél.</p>
+        </div>
+
         <div class="p-block">
           <h2>Hűségpontok</h2>
           <p class="p-points"><span id="p-points">0</span> pont</p>
@@ -69,9 +81,10 @@
     </section>
   </main>
 
-  <script src="pricing.js?v=6"></script>
-  <script src="data.js?v=6"></script>
-  <script src="site.js?v=6"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="pricing.js?v=10"></script>
+  <script src="data.js?v=10"></script>
+  <script src="site.js?v=10"></script>
   <script>
     function renderProfile() {
       $('#p-out').hidden = !!user;
@@ -81,6 +94,9 @@
       if (!user) return;
 
       const lv = levelFor(user.lifetime);
+      $('#p-qr').innerHTML = qrSvg('ARKANUM:' + user.memberId);
+      $('#p-member').textContent = formatMember(user.memberId);
+      $('#p-mc-level').textContent = `${user.name} · ${lv.level.name}`;
       $('#p-points').textContent = user.points;
       $('#p-lifetime').textContent = `Összesen ${user.lifetime} pontot gyűjtöttél, a szinted ez alapján számoljuk.`;
       $('#p-level').textContent = `${lv.level.num ? lv.level.num + ' · ' : ''}${lv.level.name}, minden ${lv.level.every}. kávé ingyenes`;
