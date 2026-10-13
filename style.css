@@ -1,43 +1,163 @@
 :root {
-  --bg: #faf6f1;
-  --card: #fff;
-  --text: #2b1d14;
-  --muted: #7a6a5e;
-  --accent: #6f4e37;
-  --revolut: #191c1f;
+  --cream: #f3ead9;
+  --paper: #fbf6ec;
+  --night: #2b1a42;
+  --night-2: #3a2657;
+  --gold: #d4a85a;
+  --gold-dark: #8b6b2e;
+  --text: #2b1a42;
+  --muted: #6e6178;
+  --serif: 'Lora', Georgia, serif;
 }
 * { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body { margin: 0; font-family: var(--serif); background: var(--cream); color: var(--text); line-height: 1.6; }
+img { max-width: 100%; display: block; }
 a { color: inherit; }
-
-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
-  padding: 12px 16px; background: var(--accent); color: #fff; position: sticky; top: 0; }
-header .logo { font-weight: 700; font-size: 1.3rem; text-decoration: none; }
-nav { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-nav a { text-decoration: none; }
-nav button { background: #fff2; color: #fff; border: 1px solid #fff6; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
-
-main { max-width: 960px; margin: 0 auto; padding: 0 16px; }
-section { padding: 32px 0; }
-.hero { text-align: center; padding: 64px 0; }
-.hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); margin: 0 0 8px; }
-
-.btn { display: inline-block; background: var(--accent); color: #fff; border: 0; border-radius: 6px;
-  padding: 10px 18px; cursor: pointer; text-decoration: none; font-size: 1rem; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-.item { background: var(--card); border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px #0001; }
-.item h3 { margin: 0 0 4px; }
-.item .price { color: var(--muted); margin: 0 0 12px; }
-
-dialog { border: 0; border-radius: 12px; padding: 24px; width: min(420px, calc(100% - 32px)); }
-dialog::backdrop { background: #0006; }
-dialog h3 { margin-top: 0; }
-dialog label { display: block; margin: 8px 0; }
-dialog input:not([type=radio]) { display: block; width: 100%; padding: 8px; margin-top: 4px; }
-dialog menu { display: flex; justify-content: flex-end; gap: 8px; padding: 0; margin: 16px 0 0; }
-fieldset { border: 1px solid #ddd; border-radius: 8px; }
-#cart-list { padding-left: 18px; }
-#cart-list button { margin-left: 6px; }
-.badge { background: var(--revolut); color: #fff; font-size: .75rem; padding: 2px 6px; border-radius: 4px; }
+h1, h2, h3 { font-weight: 600; line-height: 1.2; }
+h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); margin: 0 0 12px; }
+.caps { text-transform: uppercase; letter-spacing: .45em; color: var(--gold); margin: 0; }
 .muted { color: var(--muted); }
-footer { text-align: center; padding: 24px 16px; color: var(--muted); font-size: .9rem; }
+.small { font-size: .9rem; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 64px 16px; }
+.center { text-align: center; }
+.lead { max-width: 640px; margin: 0 0 28px; }
+.center .lead { margin-inline: auto; }
+
+/* Fejléc */
+header { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center;
+  gap: 8px 20px; padding: 10px 16px; background: var(--night); color: var(--cream); border-bottom: 1px solid var(--gold); }
+.brand { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; text-decoration: none; }
+nav { display: flex; gap: 16px; margin-right: auto; }
+.account { display: flex; gap: 8px; }
+nav a { text-decoration: none; font-size: .95rem; }
+nav a:hover { color: var(--gold); }
+.pill { font: inherit; font-size: .9rem; background: transparent; color: var(--cream); border: 1px solid var(--gold);
+  border-radius: 999px; padding: 4px 14px; cursor: pointer; }
+.pill:hover { background: var(--gold); color: var(--night); }
+
+/* Gombok */
+.btn { display: inline-block; font: inherit; background: var(--gold); color: var(--night); border: 1px solid var(--gold);
+  border-radius: 999px; padding: 10px 22px; cursor: pointer; text-decoration: none; font-weight: 600; }
+.btn:hover { background: #e2bb72; }
+.btn.ghost { background: transparent; color: var(--gold); }
+.btn.ghost:hover { background: var(--gold); color: var(--night); }
+
+/* Éjszakai (lila) szekciók, csillagos háttér */
+.night { background: var(--night); color: var(--cream);
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 20%, #f3ead9cc, transparent),
+    radial-gradient(1px 1px at 78% 15%, #f3ead9aa, transparent),
+    radial-gradient(2px 2px at 88% 62%, #d4a85acc, transparent),
+    radial-gradient(1px 1px at 30% 80%, #f3ead999, transparent),
+    radial-gradient(1.5px 1.5px at 55% 40%, #d4a85a99, transparent),
+    radial-gradient(1px 1px at 5% 70%, #f3ead9aa, transparent); }
+.hero { text-align: center; padding: 72px 16px 88px; }
+.hero-emblem { margin: 0 auto 16px; width: clamp(120px, 25vw, 180px); height: auto; }
+.hero h1 { font-size: clamp(3rem, 11vw, 5.5rem); margin: 0; font-weight: 600; }
+.divider { display: flex; align-items: center; gap: 10px; max-width: 360px; margin: 18px auto; color: var(--gold); }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--gold); }
+.slogan { font-style: italic; font-size: clamp(1.2rem, 3vw, 1.6rem); margin: 0 0 28px; }
+.slogan.small { font-size: 1.1rem; margin: 8px 0; }
+.actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Rólunk */
+.about { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
+.tarot-sample { margin: 0; text-align: center; }
+.tarot-sample img { max-height: 460px; margin: 0 auto; border: 1px solid var(--gold); box-shadow: 0 10px 30px #2b1a4222; }
+.tarot-sample figcaption { color: var(--muted); font-size: .9rem; margin-top: 8px; }
+
+/* Árlista */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
+.item { background: var(--paper); border: 1px solid #d4a85a88; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.item img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; height: auto; }
+.item .body { padding: 14px 16px 16px; display: flex; flex-direction: column; flex: 1; }
+.item .arcana { text-transform: uppercase; letter-spacing: .2em; font-size: .75rem; color: var(--gold-dark); }
+.item h3 { margin: 2px 0 2px; font-size: 1.25rem; }
+.item .desc { color: var(--muted); font-size: .92rem; margin: 0 0 12px; flex: 1; }
+.item .row { display: flex; justify-content: space-between; align-items: center; }
+.item .price { font-weight: 600; font-size: 1.1rem; }
+.item .btn { padding: 6px 16px; }
+
+/* Nyereményjáték – kártyák */
+.draw { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 12px 0 8px; }
+.tarot { width: 190px; aspect-ratio: 2 / 3.3; border-radius: 12px; border: 2px solid var(--gold);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px; font: inherit; }
+.tarot.back { background: var(--night-2); color: var(--gold); cursor: pointer;
+  background-image: repeating-linear-gradient(45deg, #d4a85a22 0 2px, transparent 2px 14px); transition: transform .2s; }
+.tarot.back:hover:not(:disabled) { transform: translateY(-6px) rotate(-2deg); }
+.tarot.back:disabled { opacity: .45; cursor: not-allowed; }
+.tarot .sym { font-size: 3.5rem; line-height: 1; }
+.tarot.face { background: var(--cream); color: var(--night); justify-content: space-between; text-align: center; animation: flip .5s ease-out; }
+.tarot.face .num { border: 1px solid var(--gold-dark); border-radius: 999px; min-width: 36px; height: 36px; padding: 0 8px; display: grid; place-items: center; font-weight: 600; }
+.tarot.face .name { font-weight: 600; text-transform: uppercase; letter-spacing: .08em; border-top: 1px solid var(--gold-dark); padding-top: 6px; width: 100%; }
+.tarot.face .sym { color: var(--gold-dark); }
+@keyframes flip { from { transform: rotateY(90deg); } to { transform: none; } }
+.draw-msg { max-width: 560px; margin: 16px auto 0; min-height: 3em; }
+.draw-msg code { background: var(--gold); color: var(--night); padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+
+/* Kedvezmények */
+.perks { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; }
+.perk { background: var(--paper); border: 1px solid #d4a85a88; border-radius: 14px; padding: 20px; }
+.perk .big { font-size: 2.2rem; font-weight: 600; color: var(--gold-dark); }
+.perk h3 { margin: 4px 0; }
+.perk p { margin: 0; color: var(--muted); }
+.perk.revolut { background: var(--night); color: var(--cream); }
+.perk.revolut .big { color: var(--gold); }
+.perk.revolut p { color: #d9cfe6; }
+
+/* Események */
+.events { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.events article { border-left: 3px solid var(--gold); padding: 4px 0 4px 16px; }
+.events h3 { margin: 0 0 6px; }
+.events p { margin: 0; color: var(--muted); }
+
+/* Hol vagyunk */
+.where { display: grid; grid-template-columns: 1fr 1.3fr; gap: 32px; align-items: start; }
+.where iframe { width: 100%; height: 320px; border: 1px solid var(--gold); border-radius: 14px; }
+.hours { border-collapse: collapse; margin: 12px 0; }
+.hours th { text-align: left; font-weight: 400; padding: 4px 24px 4px 0; color: var(--muted); }
+
+footer { text-align: center; padding: 40px 16px; }
+footer img { margin: 0 auto; }
+footer .muted { color: #bfb2cf; font-size: .85rem; }
+
+/* Párbeszédablakok */
+dialog { border: 1px solid var(--gold); border-radius: 16px; padding: 24px; width: min(440px, calc(100% - 32px));
+  background: var(--paper); color: var(--text); font-family: var(--serif); }
+dialog::backdrop { background: #1a0f2bb3; }
+dialog h3 { margin-top: 0; font-size: 1.4rem; }
+dialog label { display: block; margin: 10px 0; }
+dialog input:not([type=radio]):not([type=checkbox]) { display: block; width: 100%; padding: 8px 10px; margin-top: 4px;
+  font: inherit; border: 1px solid #c9b48f; border-radius: 8px; background: #fff; }
+dialog label.check { display: flex; gap: 8px; align-items: center; }
+dialog menu { display: flex; justify-content: flex-end; gap: 8px; padding: 0; margin: 18px 0 0; }
+dialog menu button:not(.btn) { font: inherit; background: none; border: 1px solid #c9b48f; border-radius: 999px; padding: 8px 18px; cursor: pointer; }
+fieldset { border: 1px solid #c9b48f; border-radius: 10px; margin: 12px 0; }
+#cart-list { padding-left: 18px; margin: 0 0 8px; }
+#cart-list button { margin-left: 8px; font: inherit; border: 1px solid #c9b48f; background: none; border-radius: 6px; cursor: pointer; }
+.summary { border-top: 1px solid #c9b48f; padding-top: 10px; }
+.summary p { margin: 2px 0; display: flex; justify-content: space-between; }
+.summary .total { font-size: 1.2rem; font-weight: 600; }
+.badge { background: var(--night); color: var(--gold); font-size: .75rem; padding: 2px 8px; border-radius: 999px; }
+
+.paysheet { background: #111; color: #fff; border-color: #333; text-align: center; }
+.paysheet .amount { font-size: 2.2rem; font-weight: 600; margin: 8px 0; }
+.paysheet .demo-tag { color: var(--gold); font-size: .8rem; letter-spacing: .1em; margin: 0; }
+.paysheet menu { justify-content: center; }
+.paysheet menu button:not(.btn) { color: #fff; border-color: #555; }
+
+@media (max-width: 760px) {
+  .about, .where { grid-template-columns: 1fr; }
+  .tarot { width: 140px; }
+  .tarot .sym { font-size: 2.5rem; }
+  .pill { font-size: .8rem; padding: 3px 10px; }
+  .brand span { display: none; }
+}
+@media (max-width: 1000px) {
+  header { flex-wrap: wrap; }
+  .brand { font-size: 1.25rem; }
+  .brand img { width: 32px; height: 32px; }
+  nav { order: 3; width: 100%; overflow-x: auto; white-space: nowrap; padding-bottom: 2px; }
+}
