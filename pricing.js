@@ -1,6 +1,8 @@
 // Árazás, kedvezmények, hűségprogram, nyitvatartás. Külön fájl, hogy a check.js Node-ból is tesztelhesse.
 const STUDENT_PCT = 15;
 const POINTS_PER_100FT = 1; // hűségpont minden fizetési módnál ugyanannyi; a Revolut Pay 5× RevPointsát a Revolut adja
+const DAILY_BONUS = 25;    // a nap bónusz termékére rendelésenként egyszer
+const DECK_POINTS = 1000;  // ennyi pontért kérhető egy tarot pakli (levonódik az egyenlegből, a szint marad)
 // Hűségszintek, "A Bolond útja": minden szint egy nagy arkánum, a ponthatár a lap számának százszorosa.
 // every: minden hányadik kávé ingyenes.
 const LEVELS = [
@@ -15,8 +17,8 @@ const HOURS = { 0: [10, 18], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: 
 // Diákigazolvány száma: 10 vagy 11 számjegy (az oktatási azonosító 11 jegyű).
 const validStudentId = (id) => /^\d{10,11}$/.test((id || '').replace(/\s/g, ''));
 
-// lines: [{ price, qty, coffee, freeable, pointsX }]; opts: { student, freeCoffee }
-// pointsX: pontszorzó az adott tételre (a napi menüre 2×).
+// lines: [{ price, qty, coffee, freeable, pointsX, bonus }]; opts: { student, freeCoffee }
+// pointsX: pontszorzó az adott tételre (a napi menüre 2×). bonus: a nap bónusz terméke.
 // freeCoffee: egy ingyen kávé beváltása, a kosár legolcsóbb beváltható kávéja lesz ingyenes.
 function calc(lines, opts = {}) {
   const subtotal = lines.reduce((s, l) => s + l.price * l.qty, 0);
@@ -26,9 +28,10 @@ function calc(lines, opts = {}) {
   const discount = Math.round((subtotal - free) * pct / 100);
   const total = subtotal - free - discount;
   const bonusBase = lines.reduce((s, l) => s + l.price * l.qty * ((l.pointsX || 1) - 1), 0) * (100 - pct) / 100;
-  const earned = (Math.floor(total / 100) + Math.floor(bonusBase / 100)) * POINTS_PER_100FT;
+  const bonus = lines.some((l) => l.bonus) ? DAILY_BONUS : 0;
+  const earned = (Math.floor(total / 100) + Math.floor(bonusBase / 100)) * POINTS_PER_100FT + bonus;
   const coffees = lines.reduce((s, l) => s + (l.coffee ? l.qty : 0), 0) - (free ? 1 : 0); // az ingyenes nem ad pecsétet
-  return { subtotal, free, pct, discount, total, earned, coffees };
+  return { subtotal, free, pct, discount, total, earned, bonus, coffees };
 }
 
 // Pecsétkártya: "minden 10. ingyenes" = 9 fizetett kávé után jár egy ingyen kávé.
@@ -37,14 +40,13 @@ function addStamps(card, bought, every) {
   return { stamps: all % (every - 1), credits: (card.credits || 0) + Math.floor(all / (every - 1)) };
 }
 
-// Ajándék pakli: minden 1000 pont után jár egy. A pontok nem fogynak el.
-const GIFT_EVERY = 1000;
-function giftDecks(points, claimed = 0) {
-  const earned = Math.floor(points / GIFT_EVERY);
-  return { earned, available: Math.max(0, earned - claimed), nextAt: (earned + 1) * GIFT_EVERY };
+// A nap bónusz terméke: dátumból számolt "véletlen" index, így mindenkinek ugyanaz, és naponta változik.
+function dailyPickIndex(d, n) {
+  const days = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5);
+  return (Math.imul(days, 2654435761) >>> 0) % n;
 }
 
-// Melyik szinten van, és mennyi kell a következőhöz.
+// Melyik szinten van az összes valaha gyűjtött pontja alapján, és mennyi kell a következőhöz.
 function levelFor(points) {
   const i = LEVELS.findLastIndex((l) => points >= l.min);
   const next = LEVELS[i + 1];
@@ -77,4 +79,4 @@ function pickupSlots(now, n = 8) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { calc, addStamps, giftDecks, levelFor, validStudentId, pickupSlots, isOpen };
+if (typeof module !== 'undefined') module.exports = { calc, addStamps, dailyPickIndex, levelFor, validStudentId, pickupSlots, isOpen };

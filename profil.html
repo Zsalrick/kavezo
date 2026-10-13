@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
   <main id="main">
@@ -29,6 +29,7 @@
         <div class="p-block">
           <h2>Hűségpontok</h2>
           <p class="p-points"><span id="p-points">0</span> pont</p>
+          <p class="muted small" id="p-lifetime"></p>
           <p>Szinted: <b id="p-level"></b></p>
           <progress id="p-progress" max="1" value="0"></progress>
           <p class="muted" id="p-next"></p>
@@ -41,7 +42,7 @@
         </div>
 
         <div class="p-block">
-          <h2>Ajándék pakli</h2>
+          <h2>Pakli pontokból</h2>
           <p id="p-gift"></p>
         </div>
 
@@ -68,9 +69,9 @@
     </section>
   </main>
 
-  <script src="data.js?v=4"></script>
-  <script src="pricing.js?v=4"></script>
-  <script src="site.js?v=4"></script>
+  <script src="pricing.js?v=5"></script>
+  <script src="data.js?v=5"></script>
+  <script src="site.js?v=5"></script>
   <script>
     function renderProfile() {
       $('#p-out').hidden = !!user;
@@ -79,11 +80,12 @@
       $('#p-email').textContent = user ? user.email : '';
       if (!user) return;
 
-      const lv = levelFor(user.points);
+      const lv = levelFor(user.lifetime);
       $('#p-points').textContent = user.points;
+      $('#p-lifetime').textContent = `Összesen ${user.lifetime} pontot gyűjtöttél, a szinted ez alapján számoljuk.`;
       $('#p-level').textContent = `${lv.level.num ? lv.level.num + ' · ' : ''}${lv.level.name}, minden ${lv.level.every}. kávé ingyenes`;
       $('#p-progress').hidden = !lv.next;
-      if (lv.next) $('#p-progress').value = (user.points - lv.level.min) / (lv.next.min - lv.level.min);
+      if (lv.next) $('#p-progress').value = (user.lifetime - lv.level.min) / (lv.next.min - lv.level.min);
       $('#p-next').textContent = lv.next ? `Még ${lv.toNext} pont ${lv.next.name} szintig.` : 'Elérted a legfelső szintet.';
 
       // Pecsétkártya: every-1 fizetett kávé, az utolsó mező az ingyenes
@@ -95,10 +97,9 @@
         ? `${user.credits} ingyen kávéd van, a kosárban beválthatod.`
         : `Még ${need - (user.stamps || 0)} kávé a következő ingyen kávéig.`;
 
-      const g = giftDecks(user.points, user.decksClaimed || 0);
-      $('#p-gift').replaceChildren(g.available
-        ? Object.assign(el('a', 'text-link', `${g.available} ajándék paklid van, válassz egyet!`), { href: 'pakli.html' })
-        : `Még ${g.nextAt - user.points} pont a következő ajándék pakliig. Minden 1000 pont után jár egy.`);
+      $('#p-gift').replaceChildren(user.points >= DECK_POINTS
+        ? Object.assign(el('a', 'text-link', `Van elég pontod, ${DECK_POINTS} pontért választhatsz egy paklit!`), { href: 'pakli.html' })
+        : `${DECK_POINTS} pontért bármelyik tarot paklit kérheted. Még ${DECK_POINTS - user.points} pont kell.`);
 
       $('#p-student-id').value = user.studentId || '';
 

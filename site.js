@@ -10,8 +10,14 @@ const openDialog = (d) => { d.returnValue = ''; d.showModal(); };
 
 // Fake fiókok e-mail szerint, hogy kijelentkezés után is megmaradjanak a pontok, pecsétek, rendelések.
 let user = load('user', null); // { name, email, points, stamps, credits, studentId, interests }
-// Szintlépés után a pecsétkártya rövidebb lehet: a felesleges pecsétek ingyen kávévá válnak.
-if (user) Object.assign(user, addStamps(user, 0, levelFor(user.points || 0).level.every));
+// points: elkölthető egyenleg (a pakli levonódik belőle), lifetime: összes valaha gyűjtött pont, ebből jön a szint.
+function migrate(u) {
+  if (u && u.lifetime == null) { u.lifetime = u.points || 0; u.points = Math.max(0, (u.points || 0) - (u.decksClaimed || 0) * DECK_POINTS); }
+  // Szintlépés után a pecsétkártya rövidebb lehet: a felesleges pecsétek ingyen kávévá válnak.
+  if (u) Object.assign(u, addStamps(u, 0, levelFor(u.lifetime).level.every));
+  return u;
+}
+migrate(user);
 const saveUser = () => {
   save('user', user);
   if (user) save('accounts', { ...load('accounts', {}), [user.email]: user });
@@ -126,7 +132,7 @@ $('#login-dialog').addEventListener('close', () => {
   const f = new FormData($('#login-form'));
   // Fake: bármilyen jelszót elfogad, a jelszót nem tároljuk.
   const email = f.get('email').trim().toLowerCase();
-  user = load('accounts', {})[email] || { name: f.get('username'), email, points: 0, stamps: 0, credits: 0, interests: [] };
+  user = migrate(load('accounts', {})[email]) || { name: f.get('username'), email, points: 0, lifetime: 0, stamps: 0, credits: 0, interests: [] };
   saveUser();
   $('#login-form').reset();
   afterLogin?.();

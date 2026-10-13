@@ -64,6 +64,7 @@ $('#napi-dialog').addEventListener('close', () => {
 });
 
 // --- Kínálat ---
+$('#bonus-line').textContent = `Mai bónusz: ${dailyBonus().name}, rendelésenként +${DAILY_BONUS} pont jár rá.`;
 $('#cat-bar').append(...CATEGORIES.map((c) => { const a = el('a', 'tab', c.name); a.href = '#' + c.id; return a; }));
 $('#menu').append(...CATEGORIES.map((c) => {
   const sec = el('section', 'menu-cat');
@@ -76,7 +77,9 @@ $('#menu').append(...CATEGORIES.map((c) => {
   list.append(...MENU.filter((m) => m.cat === c.id).map((m) => {
     const li = el('li', 'menu-item');
     const line = el('div', 'mi-line');
-    line.append(el('h3', null, m.name), el('span', 'leader'), el('span', 'price', ft(m.price)));
+    line.append(el('h3', null, m.name));
+    if (m.bonus) line.append(el('span', 'bonus-tag', `+${DAILY_BONUS} pont ma`));
+    line.append(el('span', 'leader'), el('span', 'price', ft(m.price)));
     const ctl = el('div', 'ctl');
     ctl.dataset.id = m.id;
     li.append(line, ctl, el('p', 'desc', m.desc), el('p', 'arcana', m.arcana));
@@ -154,6 +157,7 @@ function renderAll() {
   const rows = [['Részösszeg', ft(r.subtotal)]];
   if (r.free) rows.push(['Ingyen kávé', ft(r.free), 'save']);
   if (r.pct) rows.push([`Diákkedvezmény (${r.pct}%)`, ft(r.discount), 'save']);
+  if (r.bonus && user) rows.push(['Napi bónusz', `+${r.bonus} pont`, 'pts']);
   rows.push([user ? 'Hűségpont és pecsét' : 'Hűségpont', user ? `${r.earned} pont, ${r.coffees} pecsét` : 'Lépj be a pontokért', 'pts']);
   $('#summary').replaceChildren(...rows.map(([k, v, cls]) => {
     const p = el('p', cls);
@@ -208,17 +212,18 @@ $('#pay-dialog').addEventListener('close', () => {
 function finish(r) {
   const slot = $('input[name=pickup]:checked');
   const student = r.pct ? user.studentId : null;
-  const before = user && levelFor(user.points).level;
+  const before = user && levelFor(user.lifetime).level;
   let newFree = 0;
   if (user) {
     const left = (user.credits || 0) - (r.free ? 1 : 0);
     const card = addStamps({ stamps: user.stamps, credits: left }, r.coffees, before.every);
     user.points += r.earned;
-    Object.assign(user, addStamps(card, 0, levelFor(user.points).level.every)); // szintlépésnél a pecsétkártya rövidül
+    user.lifetime += r.earned;
+    Object.assign(user, addStamps(card, 0, levelFor(user.lifetime).level.every)); // szintlépésnél a pecsétkártya rövidül
     newFree = user.credits - left;
     saveUser();
   }
-  const after = user && levelFor(user.points).level;
+  const after = user && levelFor(user.lifetime).level;
   const no = Math.floor(1000 + Math.random() * 9000);
   // A pult nézet (pult.html) ebből a listából olvas. ponytail: csak ugyanazon a böngészőn látszik, valódi rendeléshez szerver kell.
   const orders = load('orders', []);

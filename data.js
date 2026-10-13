@@ -43,6 +43,11 @@ const dailyPastry = (d = new Date()) => { const p = MENU.filter((m) => m.daily);
 MENU.find((m) => m.id === 'napi').desc = `Egy szabadon választott kávé, a nap péksüteménye és egy kártya. Ma ${dailyPastry().name.toLowerCase()} a nap sütije.`;
 MENU.forEach((m) => { m.img ??= CATEGORIES.find((c) => c.id === m.cat).img; });
 
+// A nap bónusz terméke (+25 pont): a napi menüt és a paklikat kivéve bármelyik lehet.
+const BONUS_CANDIDATES = MENU.filter((m) => m.cat !== 'napi' && m.cat !== 'paklik');
+const dailyBonus = (d = new Date()) => BONUS_CANDIDATES[dailyPickIndex(d, BONUS_CANDIDATES.length)];
+dailyBonus().bonus = true;
+
 // Ezek számítanak kávénak a pecsétkártyán. A napi menü pecsétet ad, de ingyen kávéként nem váltható be.
 const COFFEE_IDS = ['espresso', 'doppio', 'americano', 'cappuccino', 'flatwhite', 'latte', 'filter', 'levendula', 'jegeslatte', 'coldbrew'];
 MENU.forEach((m) => { m.coffee = m.id === 'napi' || COFFEE_IDS.includes(m.id); m.freeable = COFFEE_IDS.includes(m.id); });

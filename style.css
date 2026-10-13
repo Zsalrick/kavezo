@@ -408,3 +408,5 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .sig-bonus { color: var(--gold-dark); font-weight: 700; margin-top: -6px; }
 .clear-cart { padding: 10px 0; color: var(--bad); }
 .clear-cart[data-sure] { font-weight: 700; }
+.bonus-tag { flex: none; font-size: .72rem; font-weight: 700; color: var(--night); background: var(--gold); padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.bonus-line { font-weight: 600; color: var(--gold-dark) !important; }

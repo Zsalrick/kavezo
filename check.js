@@ -1,6 +1,6 @@
 // Futtatás: node check.js
 const assert = require('assert');
-const { calc, addStamps, giftDecks, levelFor, validStudentId, pickupSlots, isOpen } = require('./pricing.js');
+const { calc, addStamps, dailyPickIndex, levelFor, validStudentId, pickupSlots, isOpen } = require('./pricing.js');
 
 const two = [{ price: 1000, qty: 2 }];
 assert.strictEqual(calc(two).total, 2000);
@@ -44,11 +44,12 @@ assert.strictEqual(levelFor(300).level.every, 9);
 assert.strictEqual(levelFor(1000).level.name, 'A Szerencsekerék');
 assert.strictEqual(levelFor(1700).level.every, 6);
 
-// Ajándék pakli: minden 1000 pont után egy
-assert.deepStrictEqual(giftDecks(999), { earned: 0, available: 0, nextAt: 1000 });
-assert.deepStrictEqual(giftDecks(1000), { earned: 1, available: 1, nextAt: 2000 });
-assert.deepStrictEqual(giftDecks(1999, 1), { earned: 1, available: 0, nextAt: 2000 });
-assert.deepStrictEqual(giftDecks(3500, 1), { earned: 3, available: 2, nextAt: 4000 });
+// Napi bónusz: +25 pont rendelésenként egyszer, és a nap terméke naponta változik
+assert.strictEqual(calc([{ price: 990, qty: 3, bonus: true }]).earned, 29 + 25);
+assert.strictEqual(calc([{ price: 990, qty: 1 }]).bonus, 0);
+const picks = new Set(Array.from({ length: 30 }, (_, i) => dailyPickIndex(new Date(2026, 9, 1 + i), 20)));
+assert.ok(picks.size > 10, 'a napi bónusz ne ugyanaz legyen minden nap');
+assert.strictEqual(dailyPickIndex(new Date(2026, 9, 13, 8), 20), dailyPickIndex(new Date(2026, 9, 13, 22), 20)); // egész nap ugyanaz
 assert.strictEqual(levelFor(99999).next, undefined);
 
 // Kedd 9:02 -> első időpont 9:30, ma
