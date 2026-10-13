@@ -42,7 +42,7 @@ function napiButton() {
   add.ariaLabel = 'Napi menü, kávé kiválasztása';
   add.onclick = () => {
     $('#napi-ok').textContent = `Kosárba · ${ft(byId('napi').price)}`;
-    $('#napi-sub').textContent = `Mellé ma ${dailyPastry().name.toLowerCase()} és egy kártya jár.`;
+    $('#napi-sub').textContent = `Mellé ma ${dailyPastry().name.toLowerCase()} és egy kártya jár. Dupla hűségpontot kapsz rá.`;
     $('#napi-coffees').replaceChildren(...MENU.filter((m) => m.freeable).map((m, i) => {
       const label = el('label', 'pay-opt');
       const input = el('input');

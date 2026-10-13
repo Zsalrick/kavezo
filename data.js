@@ -2,7 +2,7 @@
 const photo = (id, w = 600) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 const CATEGORIES = [
-  { id: 'napi', name: 'Napi menü', img: '1565252556328-92ee4a9a0983', note: 'Olcsóbb, mintha külön vennéd. Egész nap kérhető, amíg a nap sütijéből van.' },
+  { id: 'napi', name: 'Napi menü', img: '1565252556328-92ee4a9a0983', note: 'Olcsóbb, mintha külön vennéd, és dupla hűségpont jár rá. Egész nap kérhető, amíg a nap sütijéből van.' },
   { id: 'kavek', name: 'Kávék', img: '1609050471053-8636409f9f5b', note: 'Minden kávé mellé jár egy tarot kártya és hozzá egy kis magyarázó szöveg, ez benne van az árban. Növényi tejet felár nélkül adunk.' },
   { id: 'kulonleges', name: 'Különlegességek', img: '1559001724-fbad036dbc9e', note: 'A szirupokat mi főzzük, a pult mögött.' },
   { id: 'hideg', name: 'Hideg italok', img: '1461023058943-07fcbe16d735', note: 'Áprilistól októberig, és aki nagyon kéri, télen is.' },
@@ -11,7 +11,7 @@ const CATEGORIES = [
 ];
 
 const MENU = [
-  { id: 'napi', cat: 'napi', arcana: 'V · A Főpap', name: 'Napi menü', desc: '', price: 1690 },
+  { id: 'napi', cat: 'napi', arcana: 'V · A Főpap', name: 'Napi menü', desc: '', price: 1690, pointsX: 2 },
   { id: 'espresso', cat: 'kavek', arcana: 'I · A Mágus', name: 'Espresso', desc: 'Tiszta erő, egyetlen kortyban.', price: 690, img: '1530174883092-c2a7aa3f1cfe' },
   { id: 'doppio', cat: 'kavek', arcana: 'XV · Az Ördög', name: 'Doppio', desc: 'Dupla adag, ha nagy a kísértés.', price: 890, img: '1612183515105-8c737ba7585d' },
   { id: 'americano', cat: 'kavek', arcana: 'VII · A Szekér', name: 'Americano', desc: 'Hosszú út, egyenletes lendület.', price: 790, img: '1572286258217-40142c1c6a70' },

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <main id="main">
@@ -51,6 +51,7 @@
       <div class="signature-text">
         <h2>Napi menü</h2>
         <p class="sig-name">Kávé, péksüti és egy kártya <span>1690 Ft</span></p>
+        <p class="sig-bonus">Dupla hűségpont jár rá.</p>
         <p>A kávét szabadon választod, mellé a nap péksüteménye jár. <span id="napi-ma"></span></p>
         <a href="rendeles.html#napi" class="btn">Megrendelem</a>
         <a href="rendeles.html" class="text-link">Teljes kínálat</a>
@@ -72,9 +73,9 @@
     </section>
   </main>
 
-  <script src="data.js?v=2"></script>
-  <script src="pricing.js?v=2"></script>
-  <script src="site.js?v=2"></script>
+  <script src="data.js?v=3"></script>
+  <script src="pricing.js?v=3"></script>
+  <script src="site.js?v=3"></script>
   <script>$('#napi-ma').textContent = `Ma ${dailyPastry().name.toLowerCase()} van.`;</script>
 </body>
 </html>

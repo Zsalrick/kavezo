@@ -15,7 +15,8 @@ const HOURS = { 0: [10, 18], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: 
 // Diákigazolvány száma: 10 vagy 11 számjegy (az oktatási azonosító 11 jegyű).
 const validStudentId = (id) => /^\d{10,11}$/.test((id || '').replace(/\s/g, ''));
 
-// lines: [{ price, qty, coffee, freeable }]; opts: { student, freeCoffee }
+// lines: [{ price, qty, coffee, freeable, pointsX }]; opts: { student, freeCoffee }
+// pointsX: pontszorzó az adott tételre (a napi menüre 2×).
 // freeCoffee: egy ingyen kávé beváltása, a kosár legolcsóbb beváltható kávéja lesz ingyenes.
 function calc(lines, opts = {}) {
   const subtotal = lines.reduce((s, l) => s + l.price * l.qty, 0);
@@ -24,7 +25,8 @@ function calc(lines, opts = {}) {
   const pct = opts.student ? STUDENT_PCT : 0;
   const discount = Math.round((subtotal - free) * pct / 100);
   const total = subtotal - free - discount;
-  const earned = Math.floor(total / 100) * POINTS_PER_100FT;
+  const bonusBase = lines.reduce((s, l) => s + l.price * l.qty * ((l.pointsX || 1) - 1), 0) * (100 - pct) / 100;
+  const earned = (Math.floor(total / 100) + Math.floor(bonusBase / 100)) * POINTS_PER_100FT;
   const coffees = lines.reduce((s, l) => s + (l.coffee ? l.qty : 0), 0) - (free ? 1 : 0); // az ingyenes nem ad pecsétet
   return { subtotal, free, pct, discount, total, earned, coffees };
 }
