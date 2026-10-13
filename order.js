@@ -27,33 +27,33 @@ function stepper(m, big) {
 }
 
 // --- Árlista ---
-$('#cat-bar').append(...CATEGORIES.map((c) => { const a = el('a', 'chip', c.name); a.href = '#' + c.id; return a; }));
+$('#cat-bar').append(...CATEGORIES.map((c) => { const a = el('a', 'tab', c.name); a.href = '#' + c.id; return a; }));
 $('#menu').append(...CATEGORIES.map((c) => {
   const sec = el('section', 'menu-cat');
   sec.id = c.id;
-  sec.append(el('h2', null, c.name));
-  const list = el('div', 'menu-list');
+  const pic = el('img', 'cat-photo');
+  Object.assign(pic, { src: photo(c.img, 1000), alt: '', loading: 'lazy', width: 1000, height: 700 });
+  const text = el('div', 'cat-text');
+  text.append(el('h2', null, c.name), el('p', 'cat-note', c.note));
+  const list = el('ul', 'menu-list');
   list.append(...MENU.filter((m) => m.cat === c.id).map((m) => {
-    const card = el('article', 'menu-item');
-    const img = el('img');
-    Object.assign(img, { src: photo(m.img, 480), alt: m.name, loading: 'lazy', width: 480, height: 360 });
-    const body = el('div', 'mi-body');
-    body.append(el('span', 'arcana', m.arcana), el('h3', null, m.name), el('p', 'desc', m.desc));
-    const foot = el('div', 'mi-foot');
-    foot.append(el('span', 'price', ft(m.price)), el('div', 'ctl'));
-    foot.lastChild.dataset.id = m.id;
-    body.append(foot);
-    card.append(img, body);
-    return card;
+    const li = el('li', 'menu-item');
+    const line = el('div', 'mi-line');
+    line.append(el('h3', null, m.name), el('span', 'leader'), el('span', 'price', ft(m.price)));
+    const ctl = el('div', 'ctl');
+    ctl.dataset.id = m.id;
+    li.append(line, ctl, el('p', 'desc', m.desc), el('p', 'arcana', m.arcana));
+    return li;
   }));
-  sec.append(list);
+  text.append(list);
+  sec.append(pic, text);
   return sec;
 }));
 
 // Aktív kategória kiemelése görgetéskor
 const io = new IntersectionObserver((entries) => entries.forEach((e) => {
   if (!e.isIntersecting) return;
-  $$('#cat-bar .chip').forEach((a) => a.classList.toggle('active', a.hash === '#' + e.target.id));
+  $$('#cat-bar .tab').forEach((a) => a.classList.toggle('active', a.hash === '#' + e.target.id));
 }), { rootMargin: '-40% 0px -55% 0px' });
 $$('.menu-cat').forEach((s) => io.observe(s));
 

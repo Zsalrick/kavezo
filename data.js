@@ -2,10 +2,10 @@
 const photo = (id, w = 600) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 const CATEGORIES = [
-  { id: 'kavek', name: 'Kávék' },
-  { id: 'kulonleges', name: 'Különlegességek' },
-  { id: 'hideg', name: 'Hideg italok' },
-  { id: 'sutemeny', name: 'Sütemények' },
+  { id: 'kavek', name: 'Kávék', img: '1609050471053-8636409f9f5b', note: 'Minden kávénk dupla espressóból készül. Növényi tejet felár nélkül adunk.' },
+  { id: 'kulonleges', name: 'Különlegességek', img: '1559001724-fbad036dbc9e', note: 'A szirupokat mi főzzük, a pult mögött.' },
+  { id: 'hideg', name: 'Hideg italok', img: '1461023058943-07fcbe16d735', note: 'Áprilistól októberig, és aki nagyon kéri, télen is.' },
+  { id: 'sutemeny', name: 'Sütemények', img: '1530610476181-d83430b64dcd', note: 'Reggelente friss croissant érkezik egy győri pékségből.' },
 ];
 
 const MENU = [

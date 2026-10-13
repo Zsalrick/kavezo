@@ -17,7 +17,7 @@ const ICON = {
 };
 const PAGES = [
   ['index.html', 'Főoldal'],
-  ['arlista.html', 'Árlista és rendelés'],
+  ['arlista.html', 'Árlista'],
   ['nyeremenyjatek.html', 'Nyereményjáték'],
   ['kedvezmenyek.html', 'Kedvezmények'],
   ['esemenyek.html', 'Események'],
@@ -35,7 +35,7 @@ document.body.insertAdjacentHTML('afterbegin', `
     <nav id="site-nav" class="site-nav" aria-label="Fő navigáció">
       ${PAGES.map(([href, label]) => `<a href="${href}"${href === current ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
       <div class="nav-extra">
-        <a class="btn block" href="arlista.html">Rendelj online</a>
+        <a class="btn block" href="arlista.html">Rendelés</a>
         <p class="nav-status" data-open-status></p>
       </div>
     </nav>
@@ -49,31 +49,27 @@ document.body.insertAdjacentHTML('afterbegin', `
 document.body.insertAdjacentHTML('beforeend', `
   <footer class="site-footer">
     <div class="footer-grid">
-      <div>
-        <img src="assets/emblem.svg" alt="" width="64" height="64">
-        <p class="footer-slogan">„Ahol a kávé erős, a jövő pedig tisztább.”</p>
+      <div class="footer-brand">
+        <img src="assets/emblem.svg" alt="" width="56" height="56">
+        <p><b>Arkánum Kávéház</b><br>Győr, belváros</p>
       </div>
       <div>
         <h3>Nyitvatartás</h3>
-        <p>Hétfő és péntek között 7:00-tól 20:00-ig<br>Szombaton 9:00-tól 20:00-ig<br>Vasárnap 10:00-tól 18:00-ig</p>
+        <p>Hétköznap 7:00-tól 20:00-ig<br>Szombaton 9:00-tól 20:00-ig<br>Vasárnap 10:00-tól 18:00-ig</p>
       </div>
-      <div>
+      <nav aria-label="Lábléc">
         <h3>Oldalak</h3>
         <ul>${PAGES.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('')}</ul>
-      </div>
-      <div>
-        <h3>Megtalálsz</h3>
-        <p>Győr belvárosában, pár perc sétára az iskoláktól és az egyetemtől.</p>
-      </div>
+      </nav>
     </div>
-    <p class="fineprint">Iskolai projekt. A bejelentkezés és a fizetés nem valódi. Fotók: <a href="https://unsplash.com/license">Unsplash</a></p>
+    <p class="fineprint">Iskolai projekt, a bejelentkezés és a fizetés nem valódi. Fotók: <a href="https://unsplash.com/license">Unsplash</a></p>
   </footer>
 
   <dialog id="login-dialog" class="modal">
     <form method="dialog" id="login-form">
       <img src="assets/emblem.svg" alt="" width="56" height="56" class="modal-emblem">
       <h2>Belépés</h2>
-      <p class="muted">Gyűjts hűségpontot minden rendeléssel.</p>
+      <p class="muted">Belépve minden rendelés után pontot kapsz.</p>
       <label>Név <input name="username" required autocomplete="name"></label>
       <label>E-mail <input name="email" type="email" required autocomplete="email"></label>
       <label>Jelszó <input name="password" type="password" required autocomplete="current-password"></label>
@@ -153,12 +149,12 @@ $('#account-dialog').addEventListener('close', () => {
 // --- "Most nyitva" jelzés ---
 function openStatus(now = new Date()) {
   const [, c] = HOURS[now.getDay()];
-  if (isOpen(now)) return `Most nyitva, ma ${c}:00-ig`;
+  if (isOpen(now)) return `Ma ${c}:00-ig vagyunk nyitva.`;
   for (let i = 0; i < 7; i++) {
     const d = new Date(now);
     d.setDate(d.getDate() + i);
     const [o] = HOURS[d.getDay()];
-    if (i > 0 || now.getHours() < o) return `Most zárva, nyitunk ${i === 0 ? 'ma' : i === 1 ? 'holnap' : d.toLocaleDateString('hu-HU', { weekday: 'long' })} ${o}:00-kor`;
+    if (i > 0 || now.getHours() < o) return `Most zárva vagyunk, ${i === 0 ? 'ma' : i === 1 ? 'holnap' : d.toLocaleDateString('hu-HU', { weekday: 'long' })} ${o}:00-kor nyitunk.`;
   }
 }
 $$('[data-open-status]').forEach((e) => { e.textContent = openStatus(); });
@@ -167,8 +163,8 @@ $$('[data-open-status]').forEach((e) => { e.textContent = openStatus(); });
 function renderInterest() {
   $$('[data-interest]').forEach((b) => {
     const on = user?.interests?.includes(b.dataset.interest);
-    b.textContent = on ? 'Feliratkoztál ✓' : 'Érdekel, értesítsetek';
-    b.classList.toggle('ghost', !!on);
+    b.textContent = on ? 'Szólunk, ha lesz időpont ✓' : 'Szóljatok, ha lesz időpont';
+    b.classList.toggle('quiet', !!on);
   });
 }
 document.addEventListener('click', (e) => {

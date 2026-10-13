@@ -13,12 +13,10 @@
 </head>
 <body>
   <main id="main">
-    <section class="page-hero">
-      <p class="eyebrow">Rendelj előre</p>
+    <header class="page-head wrap">
       <h1>Árlista</h1>
-      <p>Válaszd ki a kedvenceidet, add meg, mikorra kéred, és vedd át a pultnál sorbanállás nélkül.</p>
-      <p class="status-pill" data-open-status></p>
-    </section>
+      <p>Rendelj előre, és vedd át a pultnál. Az átvétel idejét a kosárban választhatod ki. <span data-open-status></span></p>
+    </header>
 
     <nav class="cat-bar" id="cat-bar" aria-label="Kategóriák"></nav>
     <div class="wrap menu-wrap" id="menu"></div>
@@ -59,7 +57,7 @@
 
         <h3>Fizetés</h3>
         <div class="pay-options">
-          <label class="pay-opt"><input type="radio" name="pay" value="revolut" checked><span><b>Revolut Pay</b><small>Gyors fizetés az appból</small></span><em class="tag">5× pont</em></label>
+          <label class="pay-opt"><input type="radio" name="pay" value="revolut" checked><span><b>Revolut Pay</b><small>Ötszörös hűségpont</small></span></label>
           <label class="pay-opt"><input type="radio" name="pay" value="card"><span><b>Bankkártya</b><small>Visa, Mastercard</small></span></label>
           <label class="pay-opt"><input type="radio" name="pay" value="cash"><span><b>Fizetés átvételkor</b><small>Készpénz vagy kártya a pultnál</small></span></label>
         </div>
@@ -86,9 +84,9 @@
 
   <dialog id="done-dialog" class="modal">
     <form method="dialog" class="center">
-      <div class="done-check" aria-hidden="true">✓</div>
+      <img src="assets/emblem.svg" alt="" width="72" height="72" class="modal-emblem">
       <h2>Köszönjük a rendelést!</h2>
-      <p class="muted">Kortyolj a jövőbe!</p>
+      <p class="muted">A pultnál a rendelésszámmal kérd.</p>
       <dl class="receipt">
         <div><dt>Rendelésszám</dt><dd id="done-no"></dd></div>
         <div><dt>Átvétel</dt><dd id="done-time"></dd></div>

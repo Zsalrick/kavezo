@@ -4,101 +4,75 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Arkánum Kávéház · Győr</title>
-  <meta name="description" content="Tarot ihlette kávéház Győr belvárosában. Kortyolj a jövőbe!">
+  <meta name="description" content="Kávé és tarot Győr belvárosában. Minden kávé mellé húzhatsz egy kártyát.">
   <meta name="theme-color" content="#2b1a42">
   <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main id="main">
-    <section class="hero" style="--bg: url('https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=1600&q=70')">
-      <div class="hero-inner">
-        <img src="assets/emblem.svg" alt="" class="hero-emblem" width="150" height="150">
-        <h1>Arkánum</h1>
-        <p class="caps">Kávéház · Győr</p>
-        <div class="divider"><span>✦</span></div>
-        <p class="slogan">„Kortyolj a jövőbe!”</p>
+    <section class="home-hero">
+      <img class="hero-photo" src="https://images.unsplash.com/photo-1520460095596-52dcd38c5f20?auto=format&fit=crop&w=1800&q=75" alt="Barista tejet önt egy csésze kávéba" width="1800" height="1200">
+      <div class="hero-card">
+        <h1>Arkánum Kávéház</h1>
+        <p>Kávé és tarot Győr belvárosában. Minden kávé mellé húzhatsz egy kártyát.</p>
+        <p class="hero-hours" data-open-status></p>
         <div class="actions">
-          <a href="arlista.html" class="btn">Rendelj online</a>
-          <a href="nyeremenyjatek.html" class="btn ghost">Húzz egy lapot</a>
+          <a href="arlista.html" class="btn">Rendelés</a>
+          <a href="kapcsolat.html" class="text-link light">Hol vagyunk?</a>
         </div>
-        <p class="status-pill" data-open-status></p>
       </div>
     </section>
 
-    <section class="wrap split">
-      <div>
-        <p class="eyebrow">Rólunk</p>
-        <h2>Ahol a kávé mesél</h2>
-        <p>Győrben egyedülálló, tarot ihlette hangulattal várunk a belvárosban, pár perc sétára az iskoláktól és az egyetemtől. Rádió helyett saját, gondosan összeállított lejátszási listánk szól.</p>
-        <p>Minden kávé mellé húzhatsz egy kártyát. A lapokhoz játékos, önismeretet segítő leírásokat adunk, hogy a kávézás egy kis kaland is legyen.</p>
-        <p class="quote">Főzzük a kávét, olvassuk a sorsot.</p>
+    <section class="wrap story">
+      <div class="story-text">
+        <h2>A kávé mellé egy lap jár</h2>
+        <p>A pultnál minden kávé mellé húzhatsz egy tarot kártyát. A lapon egy rövid, játékos üzenet áll. Nem jóslat, inkább egy gondolat a napodhoz. Elviheted, megtarthatod, vagy otthagyhatod a következő vendégnek.</p>
+        <p>Nálunk nem szól rádió. A lejátszási listát mi raktuk össze, olyan zenékből, amik mellett jó olvasni, tanulni vagy csak ülni egy kicsit.</p>
+        <p>Ha jobban érdekel a tarot, néha tanfolyamot és paklikészítő délutánt is tartunk. Ezekről az <a href="esemenyek.html">események</a> között írunk.</p>
       </div>
-      <figure class="tarot-sample">
-        <img src="assets/kartya-magus.png" alt="Példakártya: A Mágus, fekete macska varázspálcával, leírással és kulcsszavakkal" loading="lazy" width="553" height="879">
+      <figure class="story-card">
+        <img src="assets/kartya-magus.png" alt="A Mágus kártya: fekete macska varázspálcával, alatta a lap jelentése és kulcsszavai" loading="lazy" width="553" height="879">
+        <figcaption>Így néz ki egy lap. Ez itt A Mágus.</figcaption>
       </figure>
     </section>
 
-    <section class="band">
-      <div class="wrap">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Kedvenceink</p>
-            <h2>A vendégek kedvenc lapjai</h2>
-          </div>
-          <a href="arlista.html" class="link-arrow">Teljes árlista →</a>
-        </div>
-        <div class="featured" id="featured"></div>
+    <section class="signature">
+      <img src="https://images.unsplash.com/photo-1559001724-fbad036dbc9e?auto=format&fit=crop&w=1400&q=75" alt="Latte tejhabbal, felülről fotózva" loading="lazy" width="1400" height="1000">
+      <div class="signature-text">
+        <h2>Ha először jársz itt, ezt kérd</h2>
+        <p class="sig-name">Levendulás latte <span>1390 Ft</span></p>
+        <p>Dupla espresso, sok tej és a saját levendulaszirupunk, amit a pult mögött főzünk. Nálunk A Hold nevét viseli.</p>
+        <a href="arlista.html#kulonleges" class="btn">Megrendelem</a>
+        <a href="arlista.html" class="text-link">Teljes árlista</a>
       </div>
     </section>
 
-    <section class="wrap">
-      <p class="eyebrow center">Az Arkánum élmény</p>
-      <h2 class="center">Több, mint egy kávé</h2>
-      <div class="features">
-        <article>
-          <span class="f-icon">✦</span>
-          <h3>Kártya minden kávé mellé</h3>
-          <p>Húzz egy lapot a pultnál, és vidd magaddal a napi üzenetét.</p>
-        </article>
-        <article>
-          <span class="f-icon">♫</span>
-          <h3>Saját lejátszási lista</h3>
-          <p>Nálunk nem rádió szól. A hangulatot a saját válogatásunk adja.</p>
-        </article>
-        <article>
-          <span class="f-icon">☾</span>
-          <h3>Tanfolyamok és workshopok</h3>
-          <p>Ismerd meg a tarot és az asztrológia világát, vagy készítsd el a saját paklidat.</p>
-          <a href="esemenyek.html" class="link-arrow">Események →</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="promo">
-      <div class="wrap promo-inner">
+    <section class="draw-teaser">
+      <div class="wrap teaser-inner">
+        <div class="teaser-card" aria-hidden="true"><img src="assets/emblem.svg" alt="" width="96" height="96"></div>
         <div>
-          <p class="eyebrow">Hűségprogram</p>
-          <h2>Fizess Revolut Pay-jel, és gyűjts ötszörös pontot</h2>
-          <p>Diákként 15% kedvezmény jár minden rendelésből, a pontjaidat pedig levásárolhatod.</p>
+          <h2>Húzz egy lapot online is</h2>
+          <p>Naponta egyszer húzhatsz. Ha a Szerencsekerék, a Nap vagy a Csillag jön ki, kuponkódot kapsz a következő rendelésedhez.</p>
+          <a href="nyeremenyjatek.html" class="btn">Lapot húzok</a>
         </div>
-        <a href="kedvezmenyek.html" class="btn">Kedvezmények</a>
       </div>
     </section>
 
-    <section class="wrap split visit">
-      <img src="https://images.unsplash.com/photo-1469631423273-6995642a6a40?auto=format&fit=crop&w=900&q=70" alt="Hangulatos kávézóbelső pulttal" loading="lazy" width="900" height="600">
+    <section class="wrap visit">
+      <img src="https://images.unsplash.com/photo-1765150487006-a6eef913f842?auto=format&fit=crop&w=1200&q=75" alt="Kivilágított kávézó bejárata este" loading="lazy" width="1200" height="900">
       <div>
-        <p class="eyebrow">Látogass el hozzánk</p>
-        <h2>Győr szívében</h2>
-        <p>A belvárosban vagyunk, ideális hely egy suli előtti kávéhoz vagy egy délutáni beszélgetéshez.</p>
-        <p class="status-pill dark" data-open-status></p>
-        <div class="actions left">
-          <a href="kapcsolat.html" class="btn">Nyitvatartás és térkép</a>
-        </div>
+        <h2>Gyere be egy kávéra</h2>
+        <p>Győr belvárosában vagyunk, pár perc sétára a középiskoláktól és az egyetemtől. Diákigazolvánnyal 15% kedvezmény jár, Revolut Pay-jel fizetve pedig ötszörös hűségpontot kapsz.</p>
+        <table class="hours compact">
+          <tr><th>Hétköznap</th><td>7:00-tól 20:00-ig</td></tr>
+          <tr><th>Szombat</th><td>9:00-tól 20:00-ig</td></tr>
+          <tr><th>Vasárnap</th><td>10:00-tól 18:00-ig</td></tr>
+        </table>
+        <p><a href="kapcsolat.html" class="text-link">Térkép és megközelítés</a> &nbsp; <a href="kedvezmenyek.html" class="text-link">Kedvezmények</a></p>
       </div>
     </section>
   </main>
@@ -106,17 +80,5 @@
   <script src="data.js"></script>
   <script src="pricing.js"></script>
   <script src="site.js"></script>
-  <script>
-    $('#featured').append(...MENU.filter((m) => m.featured).map((m) => {
-      const a = el('a', 'feat-card');
-      a.href = 'arlista.html#' + m.cat;
-      const img = el('img');
-      Object.assign(img, { src: photo(m.img, 600), alt: m.name, loading: 'lazy', width: 600, height: 450 });
-      const body = el('div', 'fc-body');
-      body.append(el('span', 'arcana', m.arcana), el('h3', null, m.name), el('p', 'desc', m.desc), el('span', 'price', ft(m.price)));
-      a.append(img, body);
-      return a;
-    }));
-  </script>
 </body>
 </html>

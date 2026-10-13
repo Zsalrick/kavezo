@@ -8,68 +8,36 @@
   <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main id="main">
-    <section class="page-hero">
-      <p class="eyebrow">Hűségprogram</p>
+    <header class="page-head wrap narrow">
       <h1>Kedvezmények</h1>
-      <p>Diákoknak, törzsvendégeknek és szerencsés kártyahúzóknak.</p>
-    </section>
+      <p>Közel vagyunk a sulikhoz, ezért a diákok nálunk mindig olcsóbban kávéznak. A törzsvendégek pedig pontot gyűjtenek.</p>
+    </header>
 
-    <section class="wrap">
-      <div class="perks">
-        <article class="perk">
-          <span class="big">15%</span>
-          <h3>Diákkedvezmény</h3>
-          <p>Diákigazolvánnyal minden rendelésből. Rendeléskor jelöld be, átvételkor mutasd fel.</p>
-        </article>
-        <article class="perk dark">
-          <span class="big">5×</span>
-          <h3>Revolut Pay pontok</h3>
-          <p>Revolut Pay-jel fizetve minden 100 Ft után 5 pontot kapsz, más fizetési móddal 1 pontot.</p>
-        </article>
-        <article class="perk">
-          <span class="big">500</span>
-          <h3>Pontbeváltás</h3>
-          <p>500 hűségpont 1000 Ft kedvezményt ér, amit a kosárban egy kattintással beválthatsz.</p>
-        </article>
-        <article class="perk">
-          <span class="big">✦</span>
-          <h3>Kuponok</h3>
-          <p>A nyereményjátékban nyert kódot a kosárban add meg. A százalékos kedvezmények közül a nagyobb érvényes.</p>
-        </article>
+    <section class="wrap narrow prose">
+      <div class="offer">
+        <h2>Diákoknak 15%</h2>
+        <p>Minden rendelésből, egész nap. Rendeléskor kapcsold be a „Diák vagyok” opciót, átvételkor pedig mutasd meg a diákigazolványod.</p>
       </div>
-    </section>
-
-    <section class="band">
-      <div class="wrap">
-        <p class="eyebrow center">Így működik</p>
-        <h2 class="center">Három lépés a jutalomig</h2>
-        <ol class="steps">
-          <li><b>Lépj be</b><span>Bármilyen e-mail címmel létrehozhatod a fiókod.</span></li>
-          <li><b>Rendelj és gyűjts</b><span>Minden rendeléssel pontot kapsz, Revolut Pay-jel ötször annyit.</span></li>
-          <li><b>Váltsd be</b><span>500 pontnál a kosárban egy kapcsolóval beváltod.</span></li>
-        </ol>
-        <div class="actions">
-          <button type="button" class="btn" data-login>Belépés</button>
-          <a href="arlista.html" class="btn ghost-dark">Rendelés</a>
-        </div>
+      <div class="offer">
+        <h2>Hűségpontok</h2>
+        <p>Ha belépve rendelsz, minden 100 Ft után pontot kapsz. 500 pontot 1000 Ft kedvezményre válthatsz a kosárban.</p>
+        <table class="plain-table">
+          <tr><th>Revolut Pay</th><td>5 pont 100 Ft után</td></tr>
+          <tr><th>Bankkártya</th><td>1 pont 100 Ft után</td></tr>
+          <tr><th>Fizetés átvételkor</th><td>1 pont 100 Ft után</td></tr>
+        </table>
+        <p class="muted small">Példa: egy 1000 Ft-os rendelés Revolut Pay-jel 50 pont, kártyával 10 pont.</p>
+        <p><button type="button" class="btn" data-login>Belépés</button></p>
       </div>
-    </section>
-
-    <section class="wrap narrow">
-      <h2>Pontgyűjtés fizetési módonként</h2>
-      <table class="rate-table">
-        <thead><tr><th>Fizetési mód</th><th>Pont 100 Ft után</th><th>Egy 1000 Ft-os rendelés</th></tr></thead>
-        <tbody>
-          <tr class="hl"><td>Revolut Pay</td><td>5 pont</td><td>50 pont</td></tr>
-          <tr><td>Bankkártya</td><td>1 pont</td><td>10 pont</td></tr>
-          <tr><td>Fizetés átvételkor</td><td>1 pont</td><td>10 pont</td></tr>
-        </tbody>
-      </table>
+      <div class="offer">
+        <h2>Kuponok a kártyahúzásból</h2>
+        <p>Az online <a href="nyeremenyjatek.html">kártyahúzásban</a> nyert kódot a kosárban add meg. A kupon és a diákkedvezmény nem adódik össze, a nagyobb számít.</p>
+      </div>
     </section>
   </main>
 
