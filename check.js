@@ -1,14 +1,16 @@
 // Futtatás: node check.js
 const assert = require('assert');
-const { calc, levelFor, pickupSlots, isOpen } = require('./pricing.js');
+const { calc, levelFor, validStudentId, pickupSlots, isOpen } = require('./pricing.js');
 
 const two = [{ price: 1000, qty: 2 }];
 assert.strictEqual(calc(two, { pay: 'card' }).total, 2000);
 assert.strictEqual(calc(two, { pay: 'revolut' }).earned, 100);           // 5× pont
 assert.strictEqual(calc(two, { pay: 'card' }).earned, 20);
 assert.strictEqual(calc(two, { student: true }).total, 1700);            // 15%
-assert.strictEqual(calc(two, { student: true, coupon: 'nap20' }).total, 1600); // a nagyobb nyer
-assert.strictEqual(calc(two, { coupon: 'KAMU' }).couponValid, false);
+assert.strictEqual(validStudentId('7212345678'), true);
+assert.strictEqual(validStudentId('72123 456789'), true);   // szóköz mehet, 11 jegy
+assert.strictEqual(validStudentId('12345'), false);
+assert.strictEqual(validStudentId('72123456ab'), false);
 
 // Hűségszintek
 assert.strictEqual(levelFor(0).level.name, 'A Bolond');

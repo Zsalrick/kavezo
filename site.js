@@ -18,7 +18,6 @@ const ICON = {
 const PAGES = [
   ['index.html', 'Főoldal'],
   ['arlista.html', 'Árlista'],
-  ['nyeremenyjatek.html', 'Nyereményjáték'],
   ['kedvezmenyek.html', 'Kedvezmények'],
   ['esemenyek.html', 'Események'],
   ['kapcsolat.html', 'Kapcsolat'],
@@ -62,7 +61,7 @@ document.body.insertAdjacentHTML('beforeend', `
         <ul>${PAGES.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('')}</ul>
       </nav>
     </div>
-    <p class="fineprint">Iskolai projekt, a bejelentkezés és a fizetés nem valódi. Fotók: <a href="https://unsplash.com/license">Unsplash</a></p>
+    <p class="fineprint">Iskolai projekt, a bejelentkezés és a fizetés nem valódi. Fotók: <a href="https://unsplash.com/license">Unsplash</a>. <a href="pult.html">Pult nézet</a></p>
   </footer>
 
   <dialog id="login-dialog" class="modal">

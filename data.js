@@ -1,4 +1,4 @@
-// Az árlista és a tarot pakli. Itt írjátok át az árakat, neveket, leírásokat.
+// Az árlista. Itt írjátok át az árakat, neveket, leírásokat.
 const photo = (id, w = 600) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
 
 const CATEGORIES = [
@@ -38,17 +38,3 @@ const dailyPastry = (d = new Date()) => { const p = MENU.filter((m) => m.daily);
 MENU.find((m) => m.id === 'napi').desc = `Bármelyik kávé, a nap péksüteménye és egy kártya. Ma ${dailyPastry().name.toLowerCase()} a nap sütije.`;
 MENU.forEach((m) => { m.img ??= CATEGORIES.find((c) => c.id === m.cat).img; });
 
-const DECK = [
-  { num: '0', name: 'A Bolond', sym: '✧', text: 'Új kezdet vár. Merj belevágni, ma egy új kávét is kipróbálhatsz!' },
-  { num: 'I', name: 'A Mágus', sym: '∞', text: 'Minden készséged megvan a sikerhez. Használd az értelmedet és az akaraterődet!' },
-  { num: 'II', name: 'A Főpapnő', sym: '☽', text: 'Hallgass az intuíciódra, a válasz már benned van.' },
-  { num: 'III', name: 'Az Uralkodónő', sym: '❀', text: 'Bőség és kreativitás ideje. Kényeztesd magad egy croissant-nal.' },
-  { num: 'VI', name: 'A Szeretők', sym: '♡', text: 'Döntés előtt állsz. A szíved jó iránytű.' },
-  { num: 'VII', name: 'A Szekér', sym: '➶', text: 'Lendületben vagy: tartsd a fókuszt, és célba érsz.' },
-  { num: 'IX', name: 'A Remete', sym: '✶', text: 'Szánj időt magadra. Egy csendes kávé is lehet meditáció.' },
-  { num: 'X', name: 'A Szerencsekerék', sym: '✺', text: 'Fordul a kerék, és most neked kedvez!', coupon: 'SZERENCSE50' },
-  { num: 'XVII', name: 'A Csillag', sym: '★', text: 'Remény és inspiráció. Jó irányba tartasz.', coupon: 'CSILLAG10' },
-  { num: 'XVIII', name: 'A Hold', sym: '☾', text: 'Nem minden az, aminek látszik. Figyelj a részletekre.' },
-  { num: 'XIX', name: 'A Nap', sym: '☀', text: 'Öröm, siker, napfény. Ragyogó napod lesz!', coupon: 'NAP20' },
-  { num: 'XXI', name: 'A Világ', sym: '◯', text: 'Egy szakasz lezárul. Ünnepeld meg, amit elértél!' },
-];

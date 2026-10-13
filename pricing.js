@@ -1,5 +1,4 @@
 // Árazás, kedvezmények, nyitvatartás. Külön fájl, hogy a check.js Node-ból is tesztelhesse.
-const COUPONS = { SZERENCSE50: 50, NAP20: 20, CSILLAG10: 10 }; // kód -> % kedvezmény
 const STUDENT_PCT = 15;
 const POINTS_PER_100FT = { revolut: 5, card: 1, cash: 1 }; // Revolut Pay = 5× pont
 // Hűségszintek az összegyűjtött pontok alapján. A legfelső szinten saját Arkánum pakli jár.
@@ -11,16 +10,17 @@ const LEVELS = [
 ];
 const HOURS = { 0: [10, 18], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [9, 20] }; // nap (0 = vasárnap) -> [nyit, zár]
 
-// lines: [{ price, qty }]; opts: { student, coupon, pay }
+// Diákigazolvány száma: 10 vagy 11 számjegy (az oktatási azonosító 11 jegyű).
+const validStudentId = (id) => /^\d{10,11}$/.test((id || '').replace(/\s/g, ''));
+
+// lines: [{ price, qty }]; opts: { student, pay }. A student akkor igaz, ha be van lépve és van érvényes diákigazolvány-szám.
 function calc(lines, opts = {}) {
   const subtotal = lines.reduce((s, l) => s + l.price * l.qty, 0);
-  const couponPct = COUPONS[(opts.coupon || '').trim().toUpperCase()] || 0;
-  // A %-os kedvezmények nem vonhatók össze: a nagyobb érvényes.
-  const pct = Math.max(opts.student ? STUDENT_PCT : 0, couponPct);
+  const pct = opts.student ? STUDENT_PCT : 0;
   const discount = Math.round(subtotal * pct / 100);
   const total = subtotal - discount;
   const earned = Math.floor(total / 100) * (POINTS_PER_100FT[opts.pay] || 1);
-  return { subtotal, pct, discount, couponValid: couponPct > 0, total, earned };
+  return { subtotal, pct, discount, total, earned };
 }
 
 // Melyik szinten van, és mennyi kell a következőhöz.
@@ -56,4 +56,4 @@ function pickupSlots(now, n = 8) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { calc, levelFor, pickupSlots, isOpen, COUPONS };
+if (typeof module !== 'undefined') module.exports = { calc, levelFor, validStudentId, pickupSlots, isOpen };

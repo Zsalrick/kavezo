@@ -47,12 +47,15 @@
         <h3>Mikorra kéred?</h3>
         <div id="slots" class="slots" role="radiogroup" aria-label="Átvételi időpont"></div>
 
-        <h3>Kedvezmények</h3>
-        <label class="switch"><input type="checkbox" id="opt-student"><span class="track"></span><span>Diák vagyok<small>15% kedvezmény, átvételkor mutasd a diákigazolványod</small></span></label>
-        <div class="coupon">
-          <input id="opt-coupon" placeholder="Kuponkód, pl. NAP20" autocomplete="off" aria-label="Kuponkód">
-          <span id="coupon-state" class="coupon-state" aria-live="polite"></span>
+        <h3>Diákkedvezmény</h3>
+        <div id="student-on">
+          <label class="switch"><input type="checkbox" id="opt-student"><span class="track"></span><span>Diák vagyok<small>15% kedvezmény. Átvételkor összevetjük a diákigazolványoddal.</small></span></label>
+          <label class="field" id="student-id-row" hidden>Diákigazolvány száma
+            <input id="opt-student-id" inputmode="numeric" autocomplete="off" maxlength="13" placeholder="10 vagy 11 számjegy">
+            <span class="field-error" id="student-id-error" aria-live="polite"></span>
+          </label>
         </div>
+        <p class="login-hint" id="student-off">A diákkedvezmény és a pontgyűjtés belépve érhető el. <button type="button" class="btn-text" data-login>Belépés</button></p>
 
         <h3>Fizetés</h3>
         <div class="pay-options">
@@ -60,7 +63,6 @@
           <label class="pay-opt"><input type="radio" name="pay" value="card"><span><b>Bankkártya</b><small>Visa, Mastercard</small></span></label>
           <label class="pay-opt"><input type="radio" name="pay" value="cash"><span><b>Fizetés átvételkor</b><small>Készpénz vagy kártya a pultnál</small></span></label>
         </div>
-        <p class="login-hint" id="login-hint">Lépj be, és gyűjts pontot a rendeléseddel! <button type="button" class="btn-text" id="cart-login">Belépés</button></p>
       </div>
     </div>
     <div class="drawer-foot" id="cart-foot">
@@ -89,7 +91,8 @@
       <dl class="receipt">
         <div><dt>Rendelésszám</dt><dd id="done-no"></dd></div>
         <div><dt>Átvétel</dt><dd id="done-time"></dd></div>
-        <div><dt>Fizetve</dt><dd id="done-total"></dd></div>
+        <div><dt id="done-total-label">Fizetve</dt><dd id="done-total"></dd></div>
+        <div id="done-student-row"><dt>Diákigazolvány</dt><dd id="done-student"></dd></div>
       </dl>
       <p id="done-points" class="small"></p>
       <button value="ok" class="btn block">Rendben</button>

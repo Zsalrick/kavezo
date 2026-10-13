@@ -49,8 +49,8 @@ button { font: inherit; color: inherit; }
 .text-link.light { color: var(--cream); }
 .actions { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
 /* Sötét háttéren arany gomb */
-.hero-card .btn, .draw-teaser .btn, .game .btn, .site-nav .btn { background: var(--gold); color: var(--night); }
-.hero-card .btn:hover, .draw-teaser .btn:hover, .game .btn:hover, .site-nav .btn:hover { background: #e2bb72; }
+.hero-card .btn, .site-nav .btn { background: var(--gold); color: var(--night); }
+.hero-card .btn:hover, .site-nav .btn:hover { background: #e2bb72; }
 
 /* ---------- Fejléc ---------- */
 .site-header { position: sticky; top: 0; z-index: 50; height: var(--header-h); display: flex; align-items: center; gap: 16px;
@@ -105,8 +105,10 @@ button { font: inherit; color: inherit; }
 }
 
 .story { display: grid; gap: 40px; align-items: center; }
-.story-card { margin: 0 auto; max-width: 300px; }
-.story-card img { transform: rotate(-3deg); box-shadow: 0 18px 40px #2b1a4233; border: 1px solid var(--line); }
+.story-card { margin: 0 auto; width: min(230px, 60vw); }
+/* Csak a kártyarajz látszik a Mágus-képből (553×879, a rajz a 140,129 és 412,554 pontok között). */
+.card-crop { aspect-ratio: 272 / 425; overflow: hidden; border-radius: 12px; transform: rotate(-3deg); box-shadow: 0 18px 40px #2b1a4240; }
+.card-crop img { width: 203.3%; max-width: none; height: auto; margin: -47.4% 0 0 -51.5%; }
 .story-card figcaption { margin-top: 18px; text-align: center; color: var(--muted); font-style: italic; }
 
 .signature { display: grid; background: var(--paper); }
@@ -117,24 +119,15 @@ button { font: inherit; color: inherit; }
 .sig-name span { font-weight: 600; }
 .signature-text .text-link { margin-left: 20px; }
 
-.draw-teaser { background: var(--night); color: var(--cream); }
-.teaser-inner { display: grid; gap: 32px; align-items: center; }
-.teaser-inner p { color: #e6dcef; }
-.teaser-card { width: 128px; aspect-ratio: 2 / 3.3; display: grid; place-items: center; background: var(--night-2);
-  border: 2px solid var(--gold); outline: 1px solid var(--gold); outline-offset: -8px; border-radius: 8px; transform: rotate(-5deg);
-  box-shadow: 0 16px 34px #0007; }
-
 .visit { display: grid; gap: 36px; align-items: center; }
 .visit img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
 
 @media (min-width: 800px) {
   .wrap { padding: 96px 32px; }
   .story { grid-template-columns: 1.3fr .7fr; gap: 72px; }
-  .story-card { max-width: 340px; }
+  .story-card { width: 260px; }
   .signature { grid-template-columns: 1.15fr 1fr; }
   .signature-text { padding: 56px 6vw; }
-  .teaser-inner { grid-template-columns: auto 1fr; gap: 64px; }
-  .teaser-card { width: 170px; margin-left: 24px; }
   .visit { grid-template-columns: 1fr 1fr; gap: 64px; }
 }
 
@@ -282,6 +275,20 @@ input:focus { outline: 2px solid var(--gold); outline-offset: 0; }
 .summary .save span:last-child { color: var(--ok); font-weight: 600; }
 .summary .pts span:last-child { color: var(--gold-dark); }
 
+label.field { display: block; margin: 4px 0 8px; font-size: .95rem; }
+label.field input { margin-top: 4px; letter-spacing: .06em; }
+.field-error { display: block; color: var(--bad); font-size: .85rem; min-height: 1.2em; }
+.btn:disabled { background: #8f8597; cursor: not-allowed; }
+
+/* ---------- Pult ---------- */
+.orders { list-style: none; padding: 0; margin: 0 0 40px; }
+.order { padding: 18px 0; border-bottom: 1px solid var(--line); }
+.order p { margin: 0 0 6px; }
+.order-head { font-size: 1.1rem; }
+.student-check { display: block; width: fit-content; background: var(--night); color: var(--gold); font-weight: 700; padding: 4px 10px; border-radius: 4px; }
+.orders.done .order { opacity: .6; }
+.order .btn { margin-top: 6px; }
+
 /* ---------- Ablakok ---------- */
 .modal { width: min(400px, calc(100% - 32px)); max-height: 90svh; padding: 28px 24px 18px; border: 0; border-radius: 8px; background: var(--paper); }
 .modal h2 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
@@ -308,29 +315,6 @@ input:focus { outline: 2px solid var(--gold); outline-offset: 0; }
 .receipt div { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .receipt dt { color: var(--muted); }
 .receipt dd { margin: 0; font-weight: 700; }
-
-/* ---------- Kártyahúzás ---------- */
-.game { background: var(--night); color: var(--cream); text-align: center; padding: 56px 20px 64px; }
-.game p { color: #e6dcef; margin-inline: auto; }
-.draw { display: flex; justify-content: center; gap: 18px; margin: 32px 0 20px; perspective: 800px; }
-.tarot { width: min(42vw, 200px); aspect-ratio: 2 / 3.3; border-radius: 8px; border: 2px solid var(--gold);
-  outline: 1px solid var(--gold); outline-offset: -9px; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 14px; padding: 18px 14px; box-shadow: 0 16px 34px #0007; }
-.tarot.back { background: var(--night-2); color: var(--cream); cursor: pointer; transition: transform .2s; }
-.tarot.back img { width: 46%; height: auto; }
-.tarot.back:hover:not(:disabled) { transform: translateY(-6px) rotate(-2deg); }
-.tarot.back:disabled { opacity: .45; cursor: default; }
-.deck-label { font-size: .82rem; }
-.tarot.face { background: var(--cream); color: var(--night); justify-content: space-between; animation: flip .6s ease-out; outline-color: var(--gold-dark); }
-.tarot.face .num { font-weight: 700; font-size: 1.1rem; }
-.tarot .sym { font-size: 3.2rem; line-height: 1; color: var(--gold-dark); }
-.tarot.face .name { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: clamp(.68rem, 2.8vw, .9rem); overflow-wrap: anywhere; }
-@keyframes flip { from { transform: rotateY(90deg); } }
-.draw-msg { max-width: 520px; margin: 0 auto; }
-.card-text { font-style: italic; font-size: 1.15rem; }
-.win { margin-top: 18px; padding-top: 18px; border-top: 1px solid #d4a85a66; }
-.win p { margin: 0 auto 6px; }
-.win code { display: block; font: 700 1.7rem var(--serif); letter-spacing: .08em; color: var(--gold); margin: 6px 0 14px; }
 
 /* ---------- Lábléc ---------- */
 .site-footer { background: var(--night); color: #d9cfe6; padding: 48px 20px calc(24px + env(safe-area-inset-bottom)); }

@@ -59,9 +59,11 @@ $$('.menu-cat').forEach((s) => io.observe(s));
 
 // --- Kosár ---
 const drawer = $('#cart');
+// Diákkedvezmény csak belépve, kitöltött diákigazolvány-számmal jár.
+const studentId = () => $('#opt-student-id').value.replace(/\s/g, '');
+const wantsStudent = () => !!user && $('#opt-student').checked;
 const opts = () => ({
-  student: $('#opt-student').checked,
-  coupon: $('#opt-coupon').value,
+  student: wantsStudent() && validStudentId(studentId()),
   pay: $('input[name=pay]:checked').value,
 });
 
@@ -89,7 +91,10 @@ function renderAll() {
   const count = ls.reduce((s, l) => s + l.qty, 0);
   $('#cart-empty').hidden = !!count;
   $('#cart-full').hidden = $('#cart-foot').hidden = !count;
-  $('#login-hint').hidden = !!user;
+  $('#student-on').hidden = !user;
+  $('#student-off').hidden = !!user;
+  $('#student-id-row').hidden = !wantsStudent();
+  if (user?.studentId && !$('#opt-student-id').value) $('#opt-student-id').value = user.studentId;
 
   $('#cart-items').replaceChildren(...ls.map((l) => {
     const li = el('li', 'cart-line');
@@ -103,10 +108,9 @@ function renderAll() {
 
   const o = opts();
   const r = calc(ls, o);
-  const coupon = $('#coupon-state');
-  const couponPct = COUPONS[o.coupon.trim().toUpperCase()];
-  coupon.textContent = !o.coupon.trim() ? '' : !r.couponValid ? 'Ismeretlen kód' : r.pct === couponPct ? 'Érvényes ✓' : 'Érvényes, de a diákkedvezmény a nagyobb';
-  coupon.className = 'coupon-state ' + (r.couponValid ? 'ok' : 'bad');
+  const idBad = wantsStudent() && !o.student;
+  $('#student-id-error').textContent = idBad && studentId() ? 'A szám 10 vagy 11 számjegyből áll.' : '';
+  $('#order-btn').disabled = idBad;
 
   const rows = [['Részösszeg', ft(r.subtotal)]];
   if (r.pct) rows.push([`Kedvezmény (${r.pct}%)`, ft(r.discount), 'save']);
@@ -119,7 +123,7 @@ function renderAll() {
   $('#cart-bar').hidden = !count || drawer.open;
   $('#cart-bar-count').textContent = `${count} tétel`;
   $('#cart-bar-total').textContent = ft(r.total);
-  $('#order-btn').textContent = `Megrendelem · ${ft(r.total)}`;
+  $('#order-btn').textContent = idBad ? 'Add meg a diákigazolványod számát' : `Megrendelem · ${ft(r.total)}`;
   return r;
 }
 
@@ -130,7 +134,6 @@ $('.cart-link').onclick = (e) => { e.preventDefault(); openCart(); };
 $$('[data-close]').forEach((b) => (b.onclick = () => b.closest('dialog').close()));
 drawer.addEventListener('click', (e) => { if (e.target === drawer) drawer.close(); }); // kattintás a háttérre
 drawer.addEventListener('input', renderAll);
-$('#cart-login').onclick = () => requireLogin(() => {});
 document.addEventListener('userchange', renderAll);
 
 $('#order-btn').onclick = () => {
@@ -148,17 +151,26 @@ $('#pay-dialog').addEventListener('close', () => {
 
 function finish(r) {
   const slot = $('input[name=pickup]:checked');
+  const student = r.pct ? studentId() : null;
   const before = user && levelFor(user.points).level;
-  if (user) { user.points += r.earned; saveUser(); }
+  if (user) { user.points += r.earned; if (student) user.studentId = student; saveUser(); }
   const after = user && levelFor(user.points).level;
+  const no = Math.floor(1000 + Math.random() * 9000);
+  // A pult nézet (pult.html) ebből a listából olvas. ponytail: csak ugyanazon a böngészőn látszik, valódi rendeléshez szerver kell.
+  const orders = load('orders', []);
+  orders.push({ no, pickup: slot.value, pickupLabel: slot.dataset.label, name: user?.name || 'Vendég', items: lines().map((l) => `${l.qty}× ${l.name}`),
+    total: r.total, pay: opts().pay, student, done: false });
+  save('orders', orders);
   drawer.close();
-  $('#done-no').textContent = '#' + Math.floor(1000 + Math.random() * 9000);
+  $('#done-no').textContent = '#' + no;
   $('#done-time').textContent = slot.dataset.label;
   $('#done-total').textContent = ft(r.total);
+  $('#done-total-label').textContent = opts().pay === 'cash' ? 'Fizetendő átvételkor' : 'Fizetve';
+  $('#done-student-row').hidden = !student;
+  $('#done-student').textContent = student;
   $('#done-points').textContent = !user ? 'Legközelebb lépj be, és gyűjts pontot!'
     : `${r.earned} pontot kaptál, egyenleged ${user.points} pont.` + (after !== before ? ` Új szintet értél el: ${after.name}!` : '');
   cart = {};
-  $('#opt-coupon').value = '';
   $('#opt-student').checked = false;
   setCart();
   openDialog($('#done-dialog'));

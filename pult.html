@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pult · Arkánum Kávéház</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2b1a42">
+  <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="main">
+    <header class="page-head wrap narrow">
+      <h1>Pult</h1>
+      <p>Az online rendelések átvételhez. Diákkedvezménynél kérd el a diákigazolványt, és nézd meg, egyezik-e a szám.</p>
+      <p class="muted small">Demo: a rendelések ebben a böngészőben tárolódnak, ezért csak azok látszanak, amiket ezen az eszközön adtak le.</p>
+    </header>
+    <section class="wrap narrow">
+      <h2>Átvételre vár</h2>
+      <ul class="orders" id="open-orders"></ul>
+      <h2>Átadva</h2>
+      <ul class="orders done" id="done-orders"></ul>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="pricing.js"></script>
+  <script src="site.js"></script>
+  <script>
+    const PAY = { revolut: 'Revolut Pay, fizetve', card: 'Bankkártya, fizetve', cash: 'Fizetés átvételkor' };
+    function renderOrders() {
+      const orders = load('orders', []).sort((a, b) => a.pickup.localeCompare(b.pickup));
+      for (const done of [false, true]) {
+        const list = $(done ? '#done-orders' : '#open-orders');
+        const mine = orders.filter((o) => o.done === done);
+        list.replaceChildren(...mine.map((o) => {
+          const li = el('li', 'order');
+          const head = el('p', 'order-head');
+          head.append(el('b', null, `#${o.no}`), ` ${o.pickupLabel} · ${o.name}`);
+          li.append(head, el('p', null, o.items.join(', ')), el('p', 'muted small', `${ft(o.total)} · ${PAY[o.pay]}`));
+          if (o.student) li.append(el('p', 'student-check', `Diákigazolvány: ${o.student}`));
+          const btn = el('button', 'btn small' + (done ? ' quiet' : ''), done ? 'Visszavonás' : 'Átadva');
+          btn.type = 'button';
+          btn.onclick = () => { o.done = !done; save('orders', orders); renderOrders(); };
+          li.append(btn);
+          return li;
+        }));
+        if (!mine.length) list.append(el('li', 'muted', done ? 'Még nincs átadott rendelés.' : 'Nincs várakozó rendelés.'));
+      }
+    }
+    renderOrders();
+    addEventListener('storage', renderOrders); // másik fülön leadott rendelés azonnal megjelenik
+  </script>
+</body>
+</html>
