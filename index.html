@@ -5,176 +5,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Arkánum Kávéház · Győr</title>
   <meta name="description" content="Tarot ihlette kávéház Győr belvárosában. Kortyolj a jövőbe!">
+  <meta name="theme-color" content="#2b1a42">
   <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <a href="#" class="brand" aria-label="Arkánum – főoldal"><img src="assets/emblem.svg" alt="" width="40" height="40"><span>Arkánum</span></a>
-    <nav>
-      <a href="#arlista">Árlista</a>
-      <a href="#jatek">Nyereményjáték</a>
-      <a href="#kedvezmenyek">Kedvezmények</a>
-      <a href="#esemenyek">Események</a>
-      <a href="#hol">Hol vagyunk</a>
-    </nav>
-    <div class="account">
-      <button id="cart-btn" type="button" class="pill">Kosár (<span id="cart-count">0</span>)</button>
-      <button id="login-btn" type="button" class="pill">Bejelentkezés</button>
-    </div>
-  </header>
-
-  <main>
-    <section class="hero night">
-      <img src="assets/emblem.svg" alt="Arkánum embléma: hold és kávéscsésze" class="hero-emblem" width="180" height="180">
-      <h1>Arkánum</h1>
-      <p class="caps">Kávéház · Győr</p>
-      <div class="divider"><span>✦</span></div>
-      <p class="slogan">„Kortyolj a jövőbe!”</p>
-      <div class="actions">
-        <a href="#arlista" class="btn">Rendelek online</a>
-        <a href="#jatek" class="btn ghost">Húzz egy lapot</a>
+  <main id="main">
+    <section class="hero" style="--bg: url('https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=1600&q=70')">
+      <div class="hero-inner">
+        <img src="assets/emblem.svg" alt="" class="hero-emblem" width="150" height="150">
+        <h1>Arkánum</h1>
+        <p class="caps">Kávéház · Győr</p>
+        <div class="divider"><span>✦</span></div>
+        <p class="slogan">„Kortyolj a jövőbe!”</p>
+        <div class="actions">
+          <a href="arlista.html" class="btn">Rendelj online</a>
+          <a href="nyeremenyjatek.html" class="btn ghost">Húzz egy lapot</a>
+        </div>
+        <p class="status-pill" data-open-status></p>
       </div>
     </section>
 
-    <section id="rolunk" class="wrap about">
+    <section class="wrap split">
       <div>
+        <p class="eyebrow">Rólunk</p>
         <h2>Ahol a kávé mesél</h2>
         <p>Győrben egyedülálló, tarot ihlette hangulattal várunk a belvárosban, pár perc sétára az iskoláktól és az egyetemtől. Rádió helyett saját, gondosan összeállított lejátszási listánk szól.</p>
-        <p>Minden kávé mellé húzhatsz egy kártyát: a lapokhoz játékos, önismeretet segítő leírásokat adunk. <em>Főzzük a kávét, olvassuk a sorsot.</em></p>
+        <p>Minden kávé mellé húzhatsz egy kártyát. A lapokhoz játékos, önismeretet segítő leírásokat adunk, hogy a kávézás egy kis kaland is legyen.</p>
+        <p class="quote">Főzzük a kávét, olvassuk a sorsot.</p>
       </div>
       <figure class="tarot-sample">
-        <img src="assets/kartya-magus.png" alt="Példakártya: A Mágus – fekete macska varázspálcával, leírással és kulcsszavakkal" loading="lazy">
-        <figcaption>Példa a kávé mellé járó kártyákból</figcaption>
+        <img src="assets/kartya-magus.png" alt="Példakártya: A Mágus, fekete macska varázspálcával, leírással és kulcsszavakkal" loading="lazy" width="553" height="879">
       </figure>
     </section>
 
-    <section id="arlista" class="wrap">
-      <h2>Árlista</h2>
-      <p class="lead">Minden italunk egy-egy nagy arkánum nevét viseli. Tedd kosárba, és vedd át a pultnál sorbanállás nélkül!</p>
-      <div id="menu-list" class="grid"></div>
-    </section>
-
-    <section id="jatek" class="night">
-      <div class="wrap center">
-        <h2>Nyereményjáték – húzz egy lapot!</h2>
-        <p class="lead">Naponta egyszer húzhatsz a paklinkból. Ha a <strong>Szerencsekerék</strong>, a <strong>Nap</strong> vagy a <strong>Csillag</strong> jön ki, kuponkódot nyersz a következő rendelésedhez.</p>
-        <div class="draw">
-          <button id="deck" type="button" class="tarot back" aria-label="Kártya húzása">
-            <span class="sym">☾</span>
-          </button>
-          <div id="drawn" class="tarot face" hidden></div>
+    <section class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Kedvenceink</p>
+            <h2>A vendégek kedvenc lapjai</h2>
+          </div>
+          <a href="arlista.html" class="link-arrow">Teljes árlista →</a>
         </div>
-        <p id="draw-msg" class="draw-msg" aria-live="polite"></p>
+        <div class="featured" id="featured"></div>
       </div>
     </section>
 
-    <section id="kedvezmenyek" class="wrap">
-      <h2>Kedvezmények</h2>
-      <div class="perks">
-        <article class="perk"><span class="big">−15%</span><h3>Diákkedvezmény</h3><p>Diákigazolvánnyal minden rendelésből. Átvételkor mutasd fel!</p></article>
-        <article class="perk revolut"><span class="big">5×</span><h3>Revolut Pay pontok</h3><p>Revolut Pay-jel fizetve ötszörös hűségpontot kapsz (100 Ft = 5 pont).</p></article>
-        <article class="perk"><span class="big">500</span><h3>Pontbeváltás</h3><p>500 hűségpont = 1000 Ft kedvezmény. Pontot bejelentkezve gyűjthetsz.</p></article>
-        <article class="perk"><span class="big">✦</span><h3>Kuponok</h3><p>A nyereményjátékban nyert kódot a pénztárnál add meg. A %-os kedvezmények közül a nagyobb érvényes.</p></article>
-      </div>
-    </section>
-
-    <section id="esemenyek" class="wrap">
-      <h2>Események</h2>
-      <div class="events">
+    <section class="wrap">
+      <p class="eyebrow center">Az Arkánum élmény</p>
+      <h2 class="center">Több, mint egy kávé</h2>
+      <div class="features">
         <article>
-          <h3>Tarot-tanfolyam</h3>
-          <p>Érdeklődéstől függően időszakos kurzusok, ahol részletesen megismerkedhetsz a kártyaolvasással és az asztrológiával.</p>
+          <span class="f-icon">✦</span>
+          <h3>Kártya minden kávé mellé</h3>
+          <p>Húzz egy lapot a pultnál, és vidd magaddal a napi üzenetét.</p>
         </article>
         <article>
-          <h3>Saját pakli workshop</h3>
-          <p>Készítsd el a saját tarot-paklidat! Kellemes kikapcsolódás, teret ad a kreativitásnak.</p>
-        </article>
-        <article>
+          <span class="f-icon">♫</span>
           <h3>Saját lejátszási lista</h3>
-          <p>Nálunk nem rádió szól: a hangulatot a saját válogatásunk adja.</p>
+          <p>Nálunk nem rádió szól. A hangulatot a saját válogatásunk adja.</p>
+        </article>
+        <article>
+          <span class="f-icon">☾</span>
+          <h3>Tanfolyamok és workshopok</h3>
+          <p>Ismerd meg a tarot és az asztrológia világát, vagy készítsd el a saját paklidat.</p>
+          <a href="esemenyek.html" class="link-arrow">Események →</a>
         </article>
       </div>
     </section>
 
-    <section id="hol" class="wrap where">
-      <div>
-        <h2>Hol vagyunk</h2>
-        <p><strong>Győr, belváros</strong> – pár perc sétára a belvárosi középiskoláktól és a Széchenyi-egyetemtől.</p>
-        <table class="hours">
-          <tr><th>Hétfő–Péntek</th><td>7:00–20:00</td></tr>
-          <tr><th>Szombat</th><td>9:00–20:00</td></tr>
-          <tr><th>Vasárnap</th><td>10:00–18:00</td></tr>
-        </table>
-        <p class="muted">A pontos cím a nyitáskor kerül fel.</p>
+    <section class="promo">
+      <div class="wrap promo-inner">
+        <div>
+          <p class="eyebrow">Hűségprogram</p>
+          <h2>Fizess Revolut Pay-jel, és gyűjts ötszörös pontot</h2>
+          <p>Diákként 15% kedvezmény jár minden rendelésből, a pontjaidat pedig levásárolhatod.</p>
+        </div>
+        <a href="kedvezmenyek.html" class="btn">Kedvezmények</a>
       </div>
-      <iframe title="Térkép: Győr belváros" loading="lazy"
-        src="https://www.openstreetmap.org/export/embed.html?bbox=17.6280%2C47.6840%2C17.6430%2C47.6910&amp;layer=mapnik&amp;marker=47.6872%2C17.6352"></iframe>
+    </section>
+
+    <section class="wrap split visit">
+      <img src="https://images.unsplash.com/photo-1469631423273-6995642a6a40?auto=format&fit=crop&w=900&q=70" alt="Hangulatos kávézóbelső pulttal" loading="lazy" width="900" height="600">
+      <div>
+        <p class="eyebrow">Látogass el hozzánk</p>
+        <h2>Győr szívében</h2>
+        <p>A belvárosban vagyunk, ideális hely egy suli előtti kávéhoz vagy egy délutáni beszélgetéshez.</p>
+        <p class="status-pill dark" data-open-status></p>
+        <div class="actions left">
+          <a href="kapcsolat.html" class="btn">Nyitvatartás és térkép</a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="night">
-    <img src="assets/emblem.svg" alt="" width="56" height="56">
-    <p class="slogan small">„A jövőd egy csésze kávéval kezdődik.”</p>
-    <p class="muted">Iskolai projekt – a bejelentkezés és a fizetés nem valódi. Fotók: <a href="https://unsplash.com/license">Unsplash</a>.</p>
-  </footer>
-
-  <!-- Bejelentkezés (fake) -->
-  <dialog id="login-dialog">
-    <form method="dialog" id="login-form">
-      <h3>Bejelentkezés</h3>
-      <label>Név <input name="username" required autocomplete="name"></label>
-      <label>E-mail <input name="email" type="email" required autocomplete="email"></label>
-      <label>Jelszó <input name="password" type="password" required autocomplete="current-password"></label>
-      <p class="muted small">Demo: bármilyen adattal be tudsz lépni.</p>
-      <menu>
-        <button value="cancel" formnovalidate>Mégse</button>
-        <button value="ok" class="btn">Belépés</button>
-      </menu>
-    </form>
-  </dialog>
-
-  <!-- Kosár + pénztár -->
-  <dialog id="cart-dialog">
-    <form method="dialog" id="checkout-form">
-      <h3>Kosár</h3>
-      <ul id="cart-list"></ul>
-      <label>Átvétel ideje <input type="time" name="pickup" min="07:00" max="20:00" required></label>
-      <label class="check"><input type="checkbox" name="student"> Diák vagyok (−15%, átvételkor igazolvány)</label>
-      <label>Kuponkód <input name="coupon" autocomplete="off" placeholder="pl. NAP20"></label>
-      <label class="check" id="points-row"><input type="checkbox" name="usePoints"> 500 pont beváltása (−1000 Ft)</label>
-      <fieldset>
-        <legend>Fizetési mód</legend>
-        <label class="check"><input type="radio" name="pay" value="revolut" checked> Revolut Pay <span class="badge">5× pont</span></label>
-        <label class="check"><input type="radio" name="pay" value="card"> Bankkártya</label>
-        <label class="check"><input type="radio" name="pay" value="cash"> Készpénz átvételkor</label>
-      </fieldset>
-      <div class="summary" id="summary"></div>
-      <menu>
-        <button value="cancel" formnovalidate>Bezár</button>
-        <button value="ok" class="btn">Megrendelem</button>
-      </menu>
-    </form>
-  </dialog>
-
-  <!-- Revolut Pay szimuláció -->
-  <dialog id="pay-dialog" class="paysheet">
-    <form method="dialog">
-      <p class="demo-tag">DEMO – nem valódi fizetés</p>
-      <h3>Revolut Pay</h3>
-      <p class="amount" id="pay-amount"></p>
-      <p id="pay-points"></p>
-      <menu>
-        <button value="cancel">Mégse</button>
-        <button value="ok" class="btn">Fizetés jóváhagyása</button>
-      </menu>
-    </form>
-  </dialog>
-
+  <script src="data.js"></script>
   <script src="pricing.js"></script>
-  <script src="app.js"></script>
+  <script src="site.js"></script>
+  <script>
+    $('#featured').append(...MENU.filter((m) => m.featured).map((m) => {
+      const a = el('a', 'feat-card');
+      a.href = 'arlista.html#' + m.cat;
+      const img = el('img');
+      Object.assign(img, { src: photo(m.img, 600), alt: m.name, loading: 'lazy', width: 600, height: 450 });
+      const body = el('div', 'fc-body');
+      body.append(el('span', 'arcana', m.arcana), el('h3', null, m.name), el('p', 'desc', m.desc), el('span', 'price', ft(m.price)));
+      a.append(img, body);
+      return a;
+    }));
+  </script>
 </body>
 </html>

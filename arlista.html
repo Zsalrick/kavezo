@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Árlista és rendelés · Arkánum Kávéház</title>
+  <meta name="theme-color" content="#2b1a42">
+  <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="main">
+    <section class="page-hero">
+      <p class="eyebrow">Rendelj előre</p>
+      <h1>Árlista</h1>
+      <p>Válaszd ki a kedvenceidet, add meg, mikorra kéred, és vedd át a pultnál sorbanállás nélkül.</p>
+      <p class="status-pill" data-open-status></p>
+    </section>
+
+    <nav class="cat-bar" id="cat-bar" aria-label="Kategóriák"></nav>
+    <div class="wrap menu-wrap" id="menu"></div>
+
+    <div class="cart-bar" id="cart-bar" hidden>
+      <button type="button">
+        <span id="cart-bar-count"></span>
+        <b>Kosár megtekintése</b>
+        <span id="cart-bar-total"></span>
+      </button>
+    </div>
+  </main>
+
+  <dialog id="cart" class="drawer" aria-labelledby="cart-title">
+    <div class="drawer-head">
+      <h2 id="cart-title">Kosarad</h2>
+      <button type="button" class="close" data-close aria-label="Bezárás">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div id="cart-empty" class="empty">
+        <img src="assets/emblem.svg" alt="" width="88" height="88">
+        <p>A kosarad még üres.</p>
+        <button type="button" class="btn" data-close>Vissza az árlistához</button>
+      </div>
+      <div id="cart-full">
+        <ul id="cart-items" class="cart-items"></ul>
+
+        <h3>Mikorra kéred?</h3>
+        <div id="slots" class="slots" role="radiogroup" aria-label="Átvételi időpont"></div>
+
+        <h3>Kedvezmények</h3>
+        <label class="switch"><input type="checkbox" id="opt-student"><span class="track"></span><span>Diák vagyok<small>15% kedvezmény, átvételkor mutasd a diákigazolványod</small></span></label>
+        <label class="switch" id="points-row"><input type="checkbox" id="opt-points"><span class="track"></span><span>500 pont beváltása<small>1000 Ft kedvezmény</small></span></label>
+        <div class="coupon">
+          <input id="opt-coupon" placeholder="Kuponkód, pl. NAP20" autocomplete="off" aria-label="Kuponkód">
+          <span id="coupon-state" class="coupon-state" aria-live="polite"></span>
+        </div>
+
+        <h3>Fizetés</h3>
+        <div class="pay-options">
+          <label class="pay-opt"><input type="radio" name="pay" value="revolut" checked><span><b>Revolut Pay</b><small>Gyors fizetés az appból</small></span><em class="tag">5× pont</em></label>
+          <label class="pay-opt"><input type="radio" name="pay" value="card"><span><b>Bankkártya</b><small>Visa, Mastercard</small></span></label>
+          <label class="pay-opt"><input type="radio" name="pay" value="cash"><span><b>Fizetés átvételkor</b><small>Készpénz vagy kártya a pultnál</small></span></label>
+        </div>
+        <p class="login-hint" id="login-hint">Lépj be, és gyűjts pontot a rendeléseddel! <button type="button" class="btn-text" id="cart-login">Belépés</button></p>
+      </div>
+    </div>
+    <div class="drawer-foot" id="cart-foot">
+      <div id="summary" class="summary"></div>
+      <button type="button" class="btn block" id="order-btn">Megrendelem</button>
+    </div>
+  </dialog>
+
+  <dialog id="pay-dialog" class="modal paysheet">
+    <form method="dialog">
+      <p class="demo-tag">Demo, nem valódi fizetés</p>
+      <h2>Revolut Pay</h2>
+      <p class="pay-merchant">Arkánum Kávéház · Győr</p>
+      <p class="amount" id="pay-amount"></p>
+      <p id="pay-points" class="pay-points"></p>
+      <button value="ok" class="btn block">Fizetés jóváhagyása</button>
+      <button value="cancel" class="btn-text block">Mégse</button>
+    </form>
+  </dialog>
+
+  <dialog id="done-dialog" class="modal">
+    <form method="dialog" class="center">
+      <div class="done-check" aria-hidden="true">✓</div>
+      <h2>Köszönjük a rendelést!</h2>
+      <p class="muted">Kortyolj a jövőbe!</p>
+      <dl class="receipt">
+        <div><dt>Rendelésszám</dt><dd id="done-no"></dd></div>
+        <div><dt>Átvétel</dt><dd id="done-time"></dd></div>
+        <div><dt>Fizetve</dt><dd id="done-total"></dd></div>
+      </dl>
+      <p id="done-points" class="small"></p>
+      <button value="ok" class="btn block">Rendben</button>
+    </form>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="pricing.js"></script>
+  <script src="site.js"></script>
+  <script src="order.js"></script>
+</body>
+</html>

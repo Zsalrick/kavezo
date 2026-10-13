@@ -1,17 +1,27 @@
-# Arkánum Kávéház · Győr – iskolai projekt
+# Arkánum Kávéház · Győr
 
-Tarot ihlette kávéház statikus weboldala (HTML/CSS/JS, build nélkül).
+Iskolai projekt: egy tarot ihlette kávéház weboldala. Statikus oldal (HTML, CSS, JS), build nélkül, GitHub Pages-en fut:
+https://zsalrick.github.io/kavezo/
 
-- **Árlista + online rendelés** – kosár, átvételi idő, rendelésszám
-- **Fake bejelentkezés** – bármilyen adattal működik, hűségpontokat gyűjt
-- **Revolut Pay (szimulált)** – 5× hűségpont; valódi fizetés nem történik
-- **Nyereményjáték** – napi egy tarot-lap húzás, egyes lapok kuponkódot adnak
-- **Kedvezmények** – diák −15%, kuponok, 500 pont = 1000 Ft
-- Események (tarot-tanfolyam, pakli-workshop), nyitvatartás, térkép
+## Oldalak
 
-Minden adat a böngésző `localStorage`-ában van, nincs szerver.
+| Oldal | Fájl |
+|---|---|
+| Főoldal | `index.html` |
+| Árlista és online rendelés | `arlista.html` (+ `order.js`) |
+| Nyereményjáték (napi kártyahúzás) | `nyeremenyjatek.html` (+ `game.js`) |
+| Kedvezmények és hűségprogram | `kedvezmenyek.html` |
+| Események | `esemenyek.html` |
+| Kapcsolat, nyitvatartás, térkép | `kapcsolat.html` |
 
-Futtatás: `python -m http.server`, majd http://localhost:8000
-Árazás teszt: `node check.js`
+Közös részek: `site.js` (fejléc hamburger menüvel, lábléc, belépés), `style.css`.
+Árlista és tarot pakli: `data.js`. Árazás, kedvezmények, nyitvatartás: `pricing.js`.
 
-Kávéfotók: [Unsplash](https://unsplash.com/license) (ingyenes licenc). Térkép: © OpenStreetMap.
+## Tudnivalók
+
+- A bejelentkezés és a fizetés **nem valódi**. Minden adat a böngésző `localStorage`-ában van.
+- Revolut Pay: szimulált fizetőablak, ötszörös hűségponttal.
+- Teszt: `node check.js`
+- Helyi futtatás: `python -m http.server`, majd http://localhost:8000
+
+Fotók: [Unsplash](https://unsplash.com/license). Térkép: © OpenStreetMap.

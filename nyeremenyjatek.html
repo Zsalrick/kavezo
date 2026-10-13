@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nyereményjáték · Arkánum Kávéház</title>
+  <meta name="theme-color" content="#2b1a42">
+  <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="main">
+    <section class="page-hero night game">
+      <p class="eyebrow">Napi húzás</p>
+      <h1>Húzz egy lapot!</h1>
+      <p>Naponta egyszer húzhatsz a paklinkból. Ha szerencséd van, kuponkódot nyersz a következő rendelésedhez.</p>
+
+      <div class="draw">
+        <button id="deck" type="button" class="tarot back" aria-label="Kártya húzása">
+          <span class="sym">☾</span>
+          <span class="deck-label">Koppints a húzáshoz</span>
+        </button>
+        <div id="drawn" class="tarot face" hidden></div>
+      </div>
+      <p id="deck-hint" class="muted-light small">Egy kártya naponta</p>
+      <div id="draw-msg" class="draw-msg" aria-live="polite"></div>
+    </section>
+
+    <section class="wrap">
+      <p class="eyebrow center">Nyeremények</p>
+      <h2 class="center">Ezek a lapok hoznak szerencsét</h2>
+      <div class="prizes">
+        <article><span class="p-sym">✺</span><h3>A Szerencsekerék</h3><p class="p-val">50% kedvezmény</p></article>
+        <article><span class="p-sym">☀</span><h3>A Nap</h3><p class="p-val">20% kedvezmény</p></article>
+        <article><span class="p-sym">★</span><h3>A Csillag</h3><p class="p-val">10% kedvezmény</p></article>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="wrap narrow">
+        <h2>Játékszabály</h2>
+        <ol class="rules">
+          <li>Naponta egy kártyát húzhatsz, éjfélkor új nap kezdődik.</li>
+          <li>A nyertes kuponkódot a kosárban, a rendelésnél add meg.</li>
+          <li>A kuponok és a diákkedvezmény nem vonhatók össze, mindig a nagyobb kedvezmény érvényes.</li>
+          <li>A kávézóban minden kávé mellé is húzhatsz egy lapot a pultnál.</li>
+        </ol>
+        <a href="arlista.html" class="btn">Irány az árlista</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="pricing.js"></script>
+  <script src="site.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
