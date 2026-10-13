@@ -26,6 +26,7 @@ assert.strictEqual(calc([{ price: 1690, qty: 1, coffee: true }], { freeCoffee: t
 assert.deepStrictEqual(addStamps({}, 9, 10), { stamps: 0, credits: 1 });
 assert.deepStrictEqual(addStamps({ stamps: 7, credits: 0 }, 3, 10), { stamps: 1, credits: 1 });
 assert.deepStrictEqual(addStamps({ stamps: 0, credits: 1 }, 7, 8), { stamps: 0, credits: 2 }); // minden 8. = 7 után
+assert.deepStrictEqual(addStamps({ stamps: 8, credits: 0 }, 0, 8), { stamps: 1, credits: 1 }); // szintlépés után normalizál
 assert.strictEqual(validStudentId('7212345678'), true);
 assert.strictEqual(validStudentId('72123 456789'), true);   // szóköz mehet, 11 jegy
 assert.strictEqual(validStudentId('12345'), false);

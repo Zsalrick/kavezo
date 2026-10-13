@@ -24,6 +24,7 @@ Kínálat és tarot paklik: `data.js`. Árazás, hűségprogram, nyitvatartás: 
 - Revolut Pay: szimulált fizetőablak. A vendég ötször annyi RevPointsot kap (ezt a Revolut adja, nem mi).
 - Hűségprogram: 100 Ft = 1 pont, szintek a „Bolond útja” szerint (0, 300, 700, 1000, 1700 pont), szintenként minden 10./9./8./7./6. kávé ingyenes, minden 1000 pont után ajándék pakli.
 - Teszt: `node check.js`
+- Ha JS vagy CSS fájl változik, a HTML-ekben emeld a `?v=` számot (pl. `?v=3`), különben a böngésző a régi fájlt használhatja a cache-ből.
 - Helyi futtatás: `python -m http.server`, majd http://localhost:8000
 
 Fotók: [Unsplash](https://unsplash.com/license). Térkép: © OpenStreetMap.

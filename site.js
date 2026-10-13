@@ -10,6 +10,8 @@ const openDialog = (d) => { d.returnValue = ''; d.showModal(); };
 
 // Fake fiókok e-mail szerint, hogy kijelentkezés után is megmaradjanak a pontok, pecsétek, rendelések.
 let user = load('user', null); // { name, email, points, stamps, credits, studentId, interests }
+// Szintlépés után a pecsétkártya rövidebb lehet: a felesleges pecsétek ingyen kávévá válnak.
+if (user) Object.assign(user, addStamps(user, 0, levelFor(user.points || 0).level.every));
 const saveUser = () => {
   save('user', user);
   if (user) save('accounts', { ...load('accounts', {}), [user.email]: user });

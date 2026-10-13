@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <main id="main">
@@ -68,9 +68,9 @@
     </section>
   </main>
 
-  <script src="data.js"></script>
-  <script src="pricing.js"></script>
-  <script src="site.js"></script>
+  <script src="data.js?v=2"></script>
+  <script src="pricing.js?v=2"></script>
+  <script src="site.js?v=2"></script>
   <script>
     function renderProfile() {
       $('#p-out').hidden = !!user;
@@ -81,7 +81,7 @@
 
       const lv = levelFor(user.points);
       $('#p-points').textContent = user.points;
-      $('#p-level').textContent = `${lv.level.num} · ${lv.level.name}, minden ${lv.level.every}. kávé ingyenes`;
+      $('#p-level').textContent = `${lv.level.num ? lv.level.num + ' · ' : ''}${lv.level.name}, minden ${lv.level.every}. kávé ingyenes`;
       $('#p-progress').hidden = !lv.next;
       if (lv.next) $('#p-progress').value = (user.points - lv.level.min) / (lv.next.min - lv.level.min);
       $('#p-next').textContent = lv.next ? `Még ${lv.toNext} pont ${lv.next.name} szintig.` : 'Elérted a legfelső szintet.';

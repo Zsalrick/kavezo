@@ -195,10 +195,11 @@ function finish(r) {
   const before = user && levelFor(user.points).level;
   let newFree = 0;
   if (user) {
-    const card = addStamps({ stamps: user.stamps, credits: (user.credits || 0) - (r.free ? 1 : 0) }, r.coffees, before.every);
-    newFree = card.credits - ((user.credits || 0) - (r.free ? 1 : 0));
-    Object.assign(user, card);
+    const left = (user.credits || 0) - (r.free ? 1 : 0);
+    const card = addStamps({ stamps: user.stamps, credits: left }, r.coffees, before.every);
     user.points += r.earned;
+    Object.assign(user, addStamps(card, 0, levelFor(user.points).level.every)); // szintlépésnél a pecsétkártya rövidül
+    newFree = user.credits - left;
     saveUser();
   }
   const after = user && levelFor(user.points).level;
