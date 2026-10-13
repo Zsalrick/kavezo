@@ -145,7 +145,7 @@ $('#order-btn').onclick = () => {
   const r = renderAll();
   if (opts().pay !== 'revolut') return finish(r);
   $('#pay-amount').textContent = ft(r.total);
-  $('#pay-points').textContent = 'Ezért a fizetésért ötszörös RevPoints jár a Revolut appodban.';
+  $('#pay-points').textContent = 'Ötször annyi RevPoints kerül a Revolut appodba.';
   drawer.close();
   openDialog($('#pay-dialog'));
 };
