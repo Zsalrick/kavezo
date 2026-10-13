@@ -406,3 +406,5 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .modal .coffee-pick .pay-opt { display: flex; margin: 0; padding: 10px 12px; gap: 10px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font-size: .95rem; }
 .coffee-pick .pay-opt:has(input:checked) { border-color: var(--night); box-shadow: inset 0 0 0 1px var(--night); }
 .sig-bonus { color: var(--gold-dark); font-weight: 700; margin-top: -6px; }
+.clear-cart { padding: 10px 0; color: var(--bad); }
+.clear-cart[data-sure] { font-weight: 700; }

@@ -170,6 +170,22 @@ function renderAll() {
 function openCart() { renderSlots(); renderAll(); drawer.showModal(); $('#cart-bar').hidden = true; }
 drawer.addEventListener('close', renderAll);
 $('#cart-bar button').onclick = openCart;
+// Kosár ürítése: első érintésre megerősítést kér, hogy ne lehessen véletlenül törölni.
+let clearTimer;
+$('#clear-cart').onclick = (e) => {
+  const b = e.currentTarget;
+  if (!b.dataset.sure) {
+    b.dataset.sure = '1';
+    b.textContent = 'Biztosan üríted? Koppints újra';
+    clearTimer = setTimeout(() => { delete b.dataset.sure; b.textContent = 'Kosár ürítése'; }, 4000);
+    return;
+  }
+  clearTimeout(clearTimer);
+  delete b.dataset.sure;
+  b.textContent = 'Kosár ürítése';
+  cart = {};
+  setCart();
+};
 $('.cart-link').onclick = (e) => { e.preventDefault(); openCart(); };
 $$('[data-close]').forEach((b) => (b.onclick = () => b.closest('dialog').close()));
 drawer.addEventListener('click', (e) => { if (e.target === drawer) drawer.close(); }); // kattintás a háttérre
