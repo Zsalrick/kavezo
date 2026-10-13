@@ -23,6 +23,7 @@ const ICON = {
 const PAGES = [
   ['index.html', 'Főoldal'],
   ['arlista.html', 'Árlista'],
+  ['pakli.html', 'Paklik'],
   ['kedvezmenyek.html', 'Kedvezmények'],
   ['esemenyek.html', 'Események'],
   ['kapcsolat.html', 'Kapcsolat'],
@@ -97,6 +98,7 @@ document.body.insertAdjacentHTML('beforeend', `
       <h3 class="acc-h">Kávépecsétek</h3>
       <div class="stamps" id="acc-stamps"></div>
       <p class="muted small" id="acc-credits"></p>
+      <p class="acc-gift" id="acc-gift"></p>
       <h3 class="acc-h">Korábbi rendeléseim</h3>
       <ul class="past-orders" id="acc-orders"></ul>
       <p class="muted small center"><a href="kedvezmenyek.html">A hűségprogramról bővebben</a></p>
@@ -155,6 +157,10 @@ document.addEventListener('click', (e) => {
   $('#acc-credits').textContent = user.credits
     ? `${user.credits} ingyen kávéd van, a kosárban beválthatod.`
     : `Minden ${lv.level.every}. kávéd ingyenes. Még ${need - (user.stamps || 0)} kávé a következőig.`;
+  const g = giftDecks(user.points, user.decksClaimed || 0);
+  $('#acc-gift').replaceChildren(g.available
+    ? Object.assign(el('a', null, `${g.available} ajándék paklid van, válassz egyet!`), { href: 'pakli.html' })
+    : `Ajándék pakli: még ${g.nextAt - user.points} pont a következőig.`);
   const mine = load('orders', []).filter((o) => o.email === user.email).reverse().slice(0, 5);
   $('#acc-orders').replaceChildren(...mine.map((o) => {
     const li = el('li');

@@ -280,6 +280,37 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .field-error { display: block; color: var(--bad); font-size: .85rem; min-height: 1.2em; }
 .btn:disabled { background: #8f8597; cursor: not-allowed; }
 
+/* ---------- Paklik ---------- */
+.gift-wrap { padding-top: 16px; }
+.gift { padding: 20px 22px; background: var(--paper); border-left: 3px solid var(--gold); margin-bottom: 48px; max-width: 760px; }
+.gift p { margin-bottom: 12px; }
+.gift p:last-child { margin-bottom: 0; }
+.gift-done { color: var(--ok); font-weight: 700; }
+.decks { display: grid; gap: 56px; }
+.deck { display: grid; gap: 28px; align-items: center; }
+.deck h2 { margin-bottom: 4px; }
+.deck .arcana { color: var(--gold-dark); margin-bottom: 10px; }
+.deck .price { font-size: 1.2rem; }
+.fan { position: relative; height: 230px; width: 240px; margin: 0 auto; }
+.fan-card { position: absolute; left: 70px; top: 10px; width: 120px; height: 200px; border-radius: 8px; overflow: hidden;
+  background: var(--d-bg); border: 2px solid var(--d-line); outline: 1px solid var(--d-line); outline-offset: -8px;
+  box-shadow: 0 10px 24px #2b1a4240; display: grid; place-items: center; transform-origin: 50% 100%; }
+.fan-card:nth-child(1) { transform: rotate(-14deg) translateX(-30px); }
+.fan-card:nth-child(2) { transform: rotate(-4deg) translateX(-6px); }
+.fan-card:nth-child(3) { transform: rotate(8deg) translateX(22px); }
+.fan-emblem { width: 56%; height: auto; }
+.fan-art { width: 205%; max-width: none; height: auto; align-self: start; justify-self: start; margin: -48% 0 0 -52%; }
+.deck-ejfel { --d-bg: var(--night); --d-line: var(--gold); }
+.deck-hajnal { --d-bg: #f6eddd; --d-line: #b5835a; }
+.deck-macska { --d-bg: #151314; --d-line: #c9a46a; }
+.deck-erdo { --d-bg: #1f3a2e; --d-line: #d4a85a; }
+@media (min-width: 760px) {
+  .decks { grid-template-columns: 1fr 1fr; gap: 64px 48px; }
+  .deck { grid-template-columns: 240px 1fr; }
+}
+.acc-gift { margin: 18px 0 0; font-weight: 600; }
+.acc-gift a { color: var(--gold-dark); }
+
 /* ---------- Pult ---------- */
 .orders { list-style: none; padding: 0; margin: 0 0 40px; }
 .order { padding: 18px 0; border-bottom: 1px solid var(--line); }

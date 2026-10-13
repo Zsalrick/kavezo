@@ -1,6 +1,6 @@
 // Futtatás: node check.js
 const assert = require('assert');
-const { calc, addStamps, levelFor, validStudentId, pickupSlots, isOpen } = require('./pricing.js');
+const { calc, addStamps, giftDecks, levelFor, validStudentId, pickupSlots, isOpen } = require('./pricing.js');
 
 const two = [{ price: 1000, qty: 2 }];
 assert.strictEqual(calc(two).total, 2000);
@@ -35,7 +35,13 @@ assert.strictEqual(validStudentId('72123456ab'), false);
 assert.strictEqual(levelFor(0).level.name, 'A Bolond');
 assert.strictEqual(levelFor(199).toNext, 1);
 assert.strictEqual(levelFor(200).level.every, 9);
-assert.strictEqual(levelFor(1000).level.reward, 'saját Arkánum tarot pakli');
+assert.strictEqual(levelFor(1000).level.reward, 'ajándék tarot pakli');
+
+// Ajándék pakli: 1000-nél az első, utána 3000, 5000...
+assert.deepStrictEqual(giftDecks(999), { earned: 0, available: 0, nextAt: 1000 });
+assert.deepStrictEqual(giftDecks(1000), { earned: 1, available: 1, nextAt: 3000 });
+assert.deepStrictEqual(giftDecks(2999, 1), { earned: 1, available: 0, nextAt: 3000 });
+assert.deepStrictEqual(giftDecks(5000, 1), { earned: 3, available: 2, nextAt: 7000 });
 assert.strictEqual(levelFor(99999).next, undefined);
 
 // Kedd 9:02 -> első időpont 9:30, ma

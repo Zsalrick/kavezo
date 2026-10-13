@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tarot paklik · Arkánum Kávéház</title>
+  <meta name="theme-color" content="#2b1a42">
+  <link rel="icon" href="assets/emblem.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="main">
+    <header class="page-head wrap">
+      <h1>Tarot paklik</h1>
+      <p>A kávé mellé járó lapjainkat mi terveztük. Teljes, 78 lapos pakliban is hazaviheted őket, négyféle dizájnban. Minden laphoz jár egy kis magyarázó kártya, ami elmondja, mit jelent a lap, és milyen kulcsszavak tartoznak hozzá.</p>
+    </header>
+
+    <section class="wrap gift-wrap">
+      <div class="gift" id="gift"></div>
+      <div class="decks" id="decks"></div>
+    </section>
+  </main>
+
+  <dialog id="gift-dialog" class="modal">
+    <form method="dialog" class="center">
+      <img src="assets/emblem.svg" alt="" width="64" height="64" class="modal-emblem">
+      <h2 id="gift-title"></h2>
+      <p class="muted" id="gift-text"></p>
+      <button value="ok" class="btn block" id="gift-ok">Ezt kérem</button>
+      <button value="cancel" class="btn-text block">Mégse</button>
+    </form>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="pricing.js"></script>
+  <script src="site.js"></script>
+  <script src="pakli.js"></script>
+</body>
+</html>

@@ -3,10 +3,11 @@ const photo = (id, w = 600) => `https://images.unsplash.com/photo-${id}?auto=for
 
 const CATEGORIES = [
   { id: 'napi', name: 'Napi menü', img: '1565252556328-92ee4a9a0983', note: 'Olcsóbb, mintha külön vennéd. Egész nap kérhető, amíg a nap sütijéből van.' },
-  { id: 'kavek', name: 'Kávék', img: '1609050471053-8636409f9f5b', note: 'Minden kávé mellé jár egy kártya, ez benne van az árban. Növényi tejet felár nélkül adunk.' },
+  { id: 'kavek', name: 'Kávék', img: '1609050471053-8636409f9f5b', note: 'Minden kávé mellé jár egy tarot kártya és hozzá egy kis magyarázó szöveg, ez benne van az árban. Növényi tejet felár nélkül adunk.' },
   { id: 'kulonleges', name: 'Különlegességek', img: '1559001724-fbad036dbc9e', note: 'A szirupokat mi főzzük, a pult mögött.' },
   { id: 'hideg', name: 'Hideg italok', img: '1461023058943-07fcbe16d735', note: 'Áprilistól októberig, és aki nagyon kéri, télen is.' },
   { id: 'sutemeny', name: 'Péksütemények', img: '1530610476181-d83430b64dcd', note: 'Reggelente frissen érkeznek. A kínálat változik, kérdezd a pultnál, mi van ma.' },
+  { id: 'paklik', name: 'Tarot paklik', img: '1600429991827-5224817554f8', note: '78 lapos paklik, minden laphoz magyarázó kártyával. Belépve hűségpontból ajándékba is kérhetsz egyet.' },
 ];
 
 const MENU = [
@@ -30,6 +31,10 @@ const MENU = [
   { id: 'kakaos', cat: 'sutemeny', arcana: 'XI · Az Igazság', name: 'Kakaós csiga', desc: 'Az igazság az, hogy ez a kedvencünk.', price: 690, daily: true },
   { id: 'pogacsa', cat: 'sutemeny', arcana: 'XVI · A Torony', name: 'Sajtos pogácsa', desc: 'Rétegről rétegre épül.', price: 590, daily: true },
   { id: 'batyu', cat: 'sutemeny', arcana: 'XII · Az Akasztott', name: 'Túrós batyu', desc: 'Néha fejjel lefelé kell nézni a dolgokat.', price: 690, daily: true },
+  { id: 'pakli-ejfel', cat: 'paklik', arcana: 'Éjlila és arany', name: 'Éjfél pakli', desc: 'A kávéház saját színei, holddal és csillagokkal.', price: 7990, design: 'ejfel' },
+  { id: 'pakli-hajnal', cat: 'paklik', arcana: 'Krém és réz', name: 'Hajnal pakli', desc: 'Világos, papírszerű lapok rézszínű díszítéssel.', price: 7990, design: 'hajnal' },
+  { id: 'pakli-macska', cat: 'paklik', arcana: 'Fekete és homok', name: 'Fekete macska pakli', desc: 'A Mágus macskája minden lapon ott van.', price: 8990, design: 'macska' },
+  { id: 'pakli-erdo', cat: 'paklik', arcana: 'Mélyzöld és arany', name: 'Erdő pakli', desc: 'Esti erdő hangulat, levelekkel és gombákkal.', price: 7990, design: 'erdo' },
   { id: 'sajttorta', cat: 'sutemeny', arcana: 'XXI · A Világ', name: 'Sajttorta', desc: 'Kerek egész, erdei gyümölccsel.', price: 1290, img: '1524351199678-941a58a3df50' },
 ];
 

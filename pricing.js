@@ -6,7 +6,7 @@ const LEVELS = [
   { min: 0, name: 'A Bolond', every: 10 },
   { min: 200, name: 'A Mágus', every: 9 },
   { min: 500, name: 'A Főpapnő', every: 8 },
-  { min: 1000, name: 'A Világ', every: 8, reward: 'saját Arkánum tarot pakli' },
+  { min: 1000, name: 'A Világ', every: 8, reward: 'ajándék tarot pakli' },
 ];
 const HOURS = { 0: [10, 18], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: [7, 20], 6: [9, 20] }; // nap (0 = vasárnap) -> [nyit, zár]
 
@@ -31,6 +31,13 @@ function calc(lines, opts = {}) {
 function addStamps(card, bought, every) {
   const all = (card.stamps || 0) + bought;
   return { stamps: all % (every - 1), credits: (card.credits || 0) + Math.floor(all / (every - 1)) };
+}
+
+// Ajándék pakli: az első 1000 pontnál, utána minden további 2000 pontnál jár egy. A pontok nem fogynak el.
+const GIFT_FIRST = 1000, GIFT_EVERY = 2000;
+function giftDecks(points, claimed = 0) {
+  const earned = points < GIFT_FIRST ? 0 : 1 + Math.floor((points - GIFT_FIRST) / GIFT_EVERY);
+  return { earned, available: Math.max(0, earned - claimed), nextAt: GIFT_FIRST + earned * GIFT_EVERY };
 }
 
 // Melyik szinten van, és mennyi kell a következőhöz.
@@ -66,4 +73,4 @@ function pickupSlots(now, n = 8) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { calc, addStamps, levelFor, validStudentId, pickupSlots, isOpen };
+if (typeof module !== 'undefined') module.exports = { calc, addStamps, giftDecks, levelFor, validStudentId, pickupSlots, isOpen };
