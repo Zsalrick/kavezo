@@ -27,4 +27,6 @@ Kínálat és tarot paklik: `data.js`. Árazás, hűségprogram, nyitvatartás: 
 - Ha JS vagy CSS fájl változik, a HTML-ekben emeld a `?v=` számot (pl. `?v=3`), különben a böngésző a régi fájlt használhatja a cache-ből.
 - Helyi futtatás: `python -m http.server`, majd http://localhost:8000
 
+QR-kód a plakátokra (a weboldalra visz, embléma a közepén): `assets/qr-weboldal.svg`
+
 Fotók: [Unsplash](https://unsplash.com/license). Térkép: © OpenStreetMap.
