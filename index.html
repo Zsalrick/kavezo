@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <main id="main">
@@ -46,14 +46,14 @@
       </figure>
     </section>
 
-    <section class="signature">
-      <img src="https://images.unsplash.com/photo-1565252556328-92ee4a9a0983?auto=format&fit=crop&w=1400&q=75" alt="Cappuccino és croissant egy asztalon" loading="lazy" width="1400" height="1000">
+    <section class="signature weekly">
+      <img src="assets/het-menuje.jpg" alt="A hét menüje plakát: Coraline fahéjas csiga, cappuccino és kártyahúzás, 1700 Ft" loading="lazy" width="1448" height="2048">
       <div class="signature-text">
-        <h2>Napi menü</h2>
-        <p class="sig-name">Kávé, péksüti és egy kártya <span>1690 Ft</span></p>
+        <h2>A hét menüje</h2>
+        <p class="sig-name"><span id="weekly-items"></span> <span>1700 Ft</span></p>
         <p class="sig-bonus">Dupla hűségpont jár rá.</p>
-        <p>A kávét szabadon választod, mellé a nap péksüteménye jár. <span id="napi-ma"></span></p>
-        <a href="rendeles.html#napi" class="btn">Megrendelem</a>
+        <p>A menü minden héten más, de a kártyahúzás mindig benne van.</p>
+        <a href="rendeles.html#het" class="btn">Megrendelem</a>
         <a href="rendeles.html" class="text-link">Teljes kínálat</a>
       </div>
     </section>
@@ -73,9 +73,9 @@
     </section>
   </main>
 
-  <script src="pricing.js?v=5"></script>
-  <script src="data.js?v=5"></script>
-  <script src="site.js?v=5"></script>
-  <script>$('#napi-ma').textContent = `Ma ${dailyPastry().name.toLowerCase()} van.`;</script>
+  <script src="pricing.js?v=6"></script>
+  <script src="data.js?v=6"></script>
+  <script src="site.js?v=6"></script>
+  <script>$('#weekly-items').textContent = `${WEEKLY.pastry} és ${WEEKLY.coffee.toLowerCase()}`;</script>
 </body>
 </html>

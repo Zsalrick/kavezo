@@ -106,7 +106,8 @@ addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
 
 // --- Fejléc állapot ---
 function updateHeader() {
-  const n = Object.values(load('cart', {})).reduce((a, b) => a + b, 0);
+  // Csak a ma is létező tételeket számoljuk (régi kosárban maradhatott megszűnt tétel).
+  const n = Object.entries(load('cart', {})).filter(([id]) => MENU.some((m) => m.id === id)).reduce((a, [, q]) => a + q, 0);
   const c = $('#cart-count');
   c.textContent = n;
   c.hidden = !n;

@@ -18,7 +18,7 @@ const HOURS = { 0: [10, 18], 1: [7, 20], 2: [7, 20], 3: [7, 20], 4: [7, 20], 5: 
 const validStudentId = (id) => /^\d{10,11}$/.test((id || '').replace(/\s/g, ''));
 
 // lines: [{ price, qty, coffee, freeable, pointsX, bonus }]; opts: { student, freeCoffee }
-// pointsX: pontszorzó az adott tételre (a napi menüre 2×). bonus: a nap bónusz terméke.
+// pointsX: pontszorzó az adott tételre (a hét menüjére 2×). bonus: a nap bónusz terméke.
 // freeCoffee: egy ingyen kávé beváltása, a kosár legolcsóbb beváltható kávéja lesz ingyenes.
 function calc(lines, opts = {}) {
   const subtotal = lines.reduce((s, l) => s + l.price * l.qty, 0);

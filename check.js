@@ -6,13 +6,13 @@ const two = [{ price: 1000, qty: 2 }];
 assert.strictEqual(calc(two).total, 2000);
 assert.strictEqual(calc(two).earned, 20);                                // 1 pont / 100 Ft, fizetési módtól függetlenül
 assert.strictEqual(calc(two, { student: true }).total, 1700);            // 15%
-// Napi menü: 2× pont
+// A hét menüje: 2× pont
 const napi = [{ price: 1690, qty: 1, coffee: true, pointsX: 2 }];
 assert.strictEqual(calc(napi).earned, 32);
 assert.strictEqual(calc(napi, { student: true }).earned, 28);              // 1437 Ft -> 14 + 14
 assert.strictEqual(calc([...napi, { price: 990, qty: 1 }]).earned, 26 + 16); // 2680 Ft -> 26, plusz 16 bónusz
 
-// Ingyen kávé: a legolcsóbb beváltható kávé ingyenes, a napi menü nem váltható be, de pecsétet ad.
+// Ingyen kávé: a legolcsóbb beváltható kávé ingyenes, a hét menüje nem váltható be, de pecsétet ad.
 const mix = [
   { price: 990, qty: 1, coffee: true, freeable: true },
   { price: 690, qty: 2, coffee: true, freeable: true },

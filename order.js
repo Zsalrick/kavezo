@@ -1,14 +1,9 @@
 // Rendelés oldal (kínálat árakkal + kosár).
-let cart = load('cart', {}); // { kulcs: db }, a napi menü kulcsa 'napi:<kávé id>'
+let cart = load('cart', {}); // { menüazonosító: db }
 const setCart = () => { save('cart', cart); updateHeader(); renderAll(); };
 const byId = (id) => MENU.find((m) => m.id === id);
-function itemFor(key) {
-  const [id, coffee] = key.split(':');
-  const m = byId(id);
-  if (!m) return null;
-  return coffee ? { ...m, key, name: `Napi menü: ${byId(coffee)?.name}, ${dailyPastry().name.toLowerCase()}` } : { ...m, key };
-}
-const lines = () => Object.entries(cart).map(([key, qty]) => { const it = itemFor(key); return it && { ...it, qty }; }).filter(Boolean);
+// Ma már nem létező tételek (régi kosárból) kimaradnak.
+const lines = () => Object.entries(cart).map(([key, qty]) => byId(key) && { ...byId(key), key, qty }).filter(Boolean);
 const change = (key, d) => { cart[key] = (cart[key] || 0) + d; if (cart[key] <= 0) delete cart[key]; setCart(); };
 
 function stepper(m, big) {
@@ -33,35 +28,6 @@ function stepper(m, big) {
   wrap.append(minus, el('span', 'qty', qty), plus);
   return wrap;
 }
-
-// Napi menü: a kávét a vendég választja, a süti a nap sütije.
-function napiButton() {
-  const wrap = el('div', 'stepper');
-  const add = el('button', 'add-btn', '+');
-  add.type = 'button';
-  add.ariaLabel = 'Napi menü, kávé kiválasztása';
-  add.onclick = () => {
-    $('#napi-ok').textContent = `Kosárba · ${ft(byId('napi').price)}`;
-    $('#napi-sub').textContent = `Mellé ma ${dailyPastry().name.toLowerCase()} és egy kártya jár. Dupla hűségpontot kapsz rá.`;
-    $('#napi-coffees').replaceChildren(...MENU.filter((m) => m.freeable).map((m, i) => {
-      const label = el('label', 'pay-opt');
-      const input = el('input');
-      Object.assign(input, { type: 'radio', name: 'napi-coffee', value: m.id, checked: i === 0 });
-      label.append(input, el('span', null, m.name));
-      return label;
-    }));
-    openDialog($('#napi-dialog'));
-  };
-  const n = Object.entries(cart).filter(([k]) => k.startsWith('napi')).reduce((s, [, q]) => s + q, 0);
-  wrap.append(add);
-  if (n) wrap.prepend(el('span', 'qty', `${n} a kosárban`));
-  return wrap;
-}
-// Szám nélkül a kapcsoló nem marad bekapcsolva (renderAll visszaállítja), helyette a profilba küldünk.
-$('#opt-student').addEventListener('change', () => { $('#student-need').hidden = !!user?.studentId; });
-$('#napi-dialog').addEventListener('close', () => {
-  if ($('#napi-dialog').returnValue === 'ok') change('napi:' + $('input[name=napi-coffee]:checked').value, 1);
-});
 
 // --- Kínálat ---
 $('#bonus-line').textContent = `Mai bónusz: ${dailyBonus().name}, rendelésenként +${DAILY_BONUS} pont jár rá.`;
@@ -126,7 +92,7 @@ function renderSlots() {
 }
 
 function renderAll() {
-  $$('.ctl').forEach((c) => c.replaceChildren(c.dataset.id === 'napi' ? napiButton() : stepper(byId(c.dataset.id))));
+  $$('.ctl').forEach((c) => c.replaceChildren(stepper(byId(c.dataset.id))));
 
   const ls = lines();
   const count = ls.reduce((s, l) => s + l.qty, 0);

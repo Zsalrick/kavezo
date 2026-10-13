@@ -401,12 +401,10 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .past-orders span { color: var(--muted); }
 .past-orders .btn { align-self: flex-start; margin-top: 6px; }
 
-/* Napi menü kávéválasztó */
-.coffee-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border: 0; background: none; }
-.modal .coffee-pick .pay-opt { display: flex; margin: 0; padding: 10px 12px; gap: 10px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font-size: .95rem; }
-.coffee-pick .pay-opt:has(input:checked) { border-color: var(--night); box-shadow: inset 0 0 0 1px var(--night); }
 .sig-bonus { color: var(--gold-dark); font-weight: 700; margin-top: -6px; }
 .clear-cart { padding: 10px 0; color: var(--bad); }
 .clear-cart[data-sure] { font-weight: 700; }
 .bonus-tag { flex: none; font-size: .72rem; font-weight: 700; color: var(--night); background: var(--gold); padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
 .bonus-line { font-weight: 600; color: var(--gold-dark) !important; }
+/* A hét menüje plakát: teljes egészében látszik, nem vágjuk */
+.signature.weekly img { object-fit: contain; height: auto; max-height: 82vh; min-height: 0; padding: 20px; background: var(--cream); }
