@@ -299,7 +299,6 @@ label.field input { margin-top: 4px; letter-spacing: .06em; }
 .fan-card:nth-child(2) { transform: rotate(-4deg) translateX(-6px); }
 .fan-card:nth-child(3) { transform: rotate(8deg) translateX(22px); }
 .fan-emblem { width: 56%; height: auto; }
-.fan-art { width: 205%; max-width: none; height: auto; align-self: start; justify-self: start; margin: -48% 0 0 -52%; }
 .deck-ejfel { --d-bg: var(--night); --d-line: var(--gold); }
 .deck-hajnal { --d-bg: #f6eddd; --d-line: #b5835a; }
 .deck-macska { --d-bg: #151314; --d-line: #c9a46a; }

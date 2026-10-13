@@ -9,9 +9,7 @@ function fan(d) {
   f.append(el('span', 'fan-card'), el('span', 'fan-card'));
   const top = el('span', 'fan-card');
   const img = el('img');
-  Object.assign(img, d.design === 'macska'
-    ? { src: 'assets/kartya-magus.png', className: 'fan-art', alt: '' }
-    : { src: 'assets/emblem.svg', className: 'fan-emblem', alt: '' });
+  Object.assign(img, { src: 'assets/emblem.svg', className: 'fan-emblem', alt: '' }); // csak a lap hátulja látszik
   top.append(img);
   f.append(top);
   return f;
