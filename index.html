@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kávézó</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <a href="#" class="logo">☕ Kávézó</a>
+    <nav>
+      <a href="#menu">Menü</a>
+      <a href="#rolunk">Rólunk</a>
+      <button id="cart-btn" type="button">Kosár (<span id="cart-count">0</span>)</button>
+      <button id="login-btn" type="button">Bejelentkezés</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Friss kávé, helyben pörkölve</h1>
+      <p>Rendelj online, és vedd át a pultnál sorbanállás nélkül.</p>
+      <a href="#menu" class="btn">Rendelek</a>
+    </section>
+
+    <section id="menu">
+      <h2>Menü</h2>
+      <div id="menu-list" class="grid"></div>
+    </section>
+
+    <section id="rolunk">
+      <h2>Rólunk</h2>
+      <p>Kis, családi kávézó. Nyitva: H–P 7–19, Szo–V 8–16.</p>
+    </section>
+  </main>
+
+  <footer>Iskolai projekt – a bejelentkezés és a fizetés nem valódi.</footer>
+
+  <!-- Bejelentkezés (fake) -->
+  <dialog id="login-dialog">
+    <form method="dialog" id="login-form">
+      <h3>Bejelentkezés</h3>
+      <label>Név <input name="name" required autocomplete="name"></label>
+      <label>E-mail <input name="email" type="email" required autocomplete="email"></label>
+      <label>Jelszó <input name="password" type="password" required autocomplete="current-password"></label>
+      <menu>
+        <button value="cancel" formnovalidate>Mégse</button>
+        <button value="ok" class="btn">Belépés</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- Kosár + pénztár -->
+  <dialog id="cart-dialog">
+    <form method="dialog" id="checkout-form">
+      <h3>Kosár</h3>
+      <ul id="cart-list"></ul>
+      <p class="total">Összesen: <strong id="cart-total">0 Ft</strong></p>
+      <fieldset>
+        <legend>Fizetési mód</legend>
+        <label><input type="radio" name="pay" value="revolut" checked> Revolut Pay <span class="badge">5× pont</span></label>
+        <label><input type="radio" name="pay" value="card"> Bankkártya</label>
+        <label><input type="radio" name="pay" value="cash"> Készpénz átvételkor</label>
+      </fieldset>
+      <p id="points-info" class="muted"></p>
+      <menu>
+        <button value="cancel" formnovalidate>Bezár</button>
+        <button value="ok" class="btn" id="order-btn">Megrendelem</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
